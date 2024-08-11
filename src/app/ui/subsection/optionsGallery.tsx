@@ -3,14 +3,16 @@ import Option from '@/app/ui/subsection/option'
 import { useState } from 'react'
 import { options } from '@/app/mock-data/data'
 import { OptionType } from '@/app/lib/types'
+import { isNull } from 'util'
 
 export default function OptionsGallery() {
-    const [selected, setSelected] = useState<string | 0>(0) // 0 to represent none selected
+    const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null) // 0 to represent none selected
+    const noneSelected = (selectedOptionId === null);
     function handleOpen(optionId: string) {
-        if(selected === optionId) {
-            setSelected(0)
+        if(selectedOptionId === optionId) {
+            setSelectedOptionId(null)
         } else {
-            setSelected(optionId)
+            setSelectedOptionId(optionId)
         }
         
     }
@@ -18,14 +20,17 @@ export default function OptionsGallery() {
     // TODO: Make the filter based on Selected
     const OptionsItems = options.map((option: OptionType) => {
         return (
-        <Option 
-            visible={option.id === selected || selected === 0} 
-            onOpen={handleOpen}
-            open={selected === option.id} 
-            key={option.id}
-            optionItem={option}
-            />
-        )
+            (noneSelected || selectedOptionId == option.id) 
+                ? <Option 
+                // visible={option.id === selected || selected === 0} 
+                onOpen={handleOpen}
+                open={selectedOptionId === option.id} 
+                key={option.id}
+                optionItem={option}
+                /> 
+                : <div></div>)
+
+        
     })
     // u might have to pass to Option using context!
     return (

@@ -94,8 +94,8 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
     }
     return (
         <div className='BIG PARENT flex flex-col gap-0 bg-gray-300 rounded-xl duration-300 ease-in'>
-            <div 
-                className={`O/U H/M OPTION py-4 px-2 grid grid-cols-5 gap-2 drop-shadow-xl bg-gray-300 rounded-xl`}
+            <button 
+                className={`O/U H/M OPTION py-4 px-2 grid grid-cols-5 gap-2 drop-shadow-xl bg-gray-300 rounded-xl text-left`}
                 onClick={() => onOpen(optionItem.id)}>
                 <div className='IMAGE col-span-1 mx-auto my-auto'>
                     <Image 
@@ -116,7 +116,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                         <p className='text-md'>{optionItem.desc}</p>
                     </div>
                 </div>
-            </div>
+            </button>
             <div className={`overflow-hidden duration-1000 ease-in-out ${open ? 'max-h-[600px]' : 'max-h-0'}`}>
                 <div className='px-8 py-6 flex flex-col gap-4'>
                     <div className='space-y-4'>
