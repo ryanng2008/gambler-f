@@ -1,11 +1,14 @@
 'use client'
 import Option from '@/app/ui/subsection/option'
 import { useState } from 'react'
-import { options } from '@/app/mock-data/data'
+import { options, subsections } from '@/app/mock-data/data'
 import { OptionType } from '@/app/lib/types'
-import { isNull } from 'util'
 
-export default function OptionsGallery() {
+
+export default function OptionsGallery({ subsectionCode="none" }: {subsectionCode: string }) {
+    const subsection = subsections.find(s => s.code === subsectionCode);
+    const subsectionOptionsIds = subsection?.options;
+    
     const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null) // 0 to represent none selected
     const noneSelected = (selectedOptionId === null);
     function handleOpen(optionId: string) {
@@ -16,9 +19,10 @@ export default function OptionsGallery() {
         }
         
     }
+    const optionsData = options.filter(option => subsectionOptionsIds?.includes(option.id))
 
     // TODO: Make the filter based on Selected
-    const OptionsItems = options.map((option: OptionType) => {
+    const optionsItems = optionsData.map((option: OptionType) => {
         return (
             (noneSelected || selectedOptionId == option.id) 
                 ? <Option 
@@ -35,7 +39,7 @@ export default function OptionsGallery() {
     // u might have to pass to Option using context!
     return (
         <div className='OPTIONS GALLERY grid grid-cols-1 md:grid-cols-2 items-start gap-6 mx-6'>
-            {OptionsItems}
+            {optionsItems}
 
 
         </div>

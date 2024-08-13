@@ -6,7 +6,7 @@ import {
     SliderProps,
   } from '@mui/base/Slider';
 import { OptionType } from '@/app/lib/types'
-import clsx from 'clsx'
+import { reduceRatio } from '@/app/lib/utils'
 
 const Slider = forwardRef(function Slider(
         props: SliderProps,
@@ -67,6 +67,10 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
     // const [selected, setSelected] = useState(false); // pull this up to PAGE which will select selected component
     const [selectedSide, setSelectedSide] = useState<string>('0');
     const [betAmount, setBetAmount] = useState<number>(0);
+    const overPayoutRate = (100/ optionItem.odds) - 1;
+    const truePayoutRate = selectedSide === 'left' ? overPayoutRate : (selectedSide === 'right' ? 1/overPayoutRate : 0);
+    const payoutPercent = selectedSide === 'right' ? Math.round(overPayoutRate * 1000)/10 : Math.round(1/overPayoutRate * 1000)/10;
+    const oddsRatio = (selectedSide === 'left') ? reduceRatio(optionItem.odds, 100 - optionItem.odds) : ((selectedSide === 'right') ? reduceRatio(100 - optionItem.odds, optionItem.odds) : '0:0');
 
     function handleSelectSide(side: string) {
         if(side == selectedSide) {
@@ -86,7 +90,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
 
     const Card = ({ title, bigContent }: {title: string, bigContent: string }) => {
         return (
-            <div className='bg-gray-200 flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
+            <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
                 <h2 className='font-semibold text-sm'>{title}</h2>
                 <h1 className=' font-extralight text-4xl'>{bigContent}</h1>
             </div>
@@ -156,11 +160,10 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             step={1}
                             />
                         </div>
-                        <div className='grid grid-cols-4 justify-center gap-4 mx-4'>
-                            <Card title='Odds' bigContent='2:1'/>
-                            <Card title='Est. Chance' bigContent='75%'/>
-                            <Card title='Payout %' bigContent='50%'/>
-                            <Card title='Payout' bigContent='$16'/>
+                        <div className='flex justify-between gap-4 mx-4'>
+                            <Card title='Odds' bigContent={oddsRatio}/>
+                            <Card title='Payout %' bigContent={(selectedSide === 'left' || selectedSide === 'right') ? `${payoutPercent}%` : 'N/A'}/>
+                            <Card title='Win Profit' bigContent={`$${Math.round(betAmount * truePayoutRate * 100) / 100}`}/>
                         </div>
                     </div>
                     <div className='SUBMIT BUTTON mx-4 text-right my-2'>

@@ -32,7 +32,8 @@ function Page() {
                 })}>
               {market.name}
               </h1>
-              <p className='text-sm'>{market.options.toLocaleString()} options</p>
+              <p className='text-sm'>Some number of options</p> 
+              {/* {market.options.toLocaleString()} */}
             </Link>
           )
         })}

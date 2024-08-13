@@ -13,12 +13,16 @@ export default function Navbar() {
     const cash = 100
     return (
         <div className="navbar grid grid-cols-3 justify-center items-center justiFFy-between bg-[#98A869] rounded-3xl text-white my-6 px-[5%] py-2 drop-shadow-xl overflow-hidden">
-                <Image 
-                src="/lebron.png" 
-                alt='Lebron'
-                className='sm:block hidden justify-start'
-                width={64} 
-                height={64} />
+                <div className='flex'>
+                <Link href="/home">
+                    <Image 
+                    src="/lebron.png" 
+                    alt='Lebron'
+                    className='sm:block hidden justify-start'
+                    width={64} 
+                    height={64} />
+                </Link>
+                </div>
                 <div className='BUTTONS flex flex-row md:gap-12 gap-4 justify-center drop-shadow-lg'>
                     {links.map((link) => {
                     return(<Link 
