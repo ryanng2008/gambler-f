@@ -1,10 +1,10 @@
+"use server";
 import React from 'react'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import clsx from 'clsx'
-import { markets } from '@/app/mock-data/data'
-import Link from 'next/link'
+import MarketGallery from '@/app/ui/explore/marketGallery';
 
-function Page() {
+export default async function Page() {
+
   return (
     <div className='CONTAINER flex flex-col gap-8'>
       <div className='HEAD'>
@@ -19,28 +19,7 @@ function Page() {
           <MagnifyingGlassIcon height={48} />
         </div>
       </div>
-      <div className='GALLERY mx-4 grid grid-cols-3 gap-6 my-2'>
-        {markets.map((market) => {
-          return (
-            <Link key={market.code} href={`/home/explore/${market.code}`} className='bg-gradient-to-br from-gray-100 to-gray-300 ONE BOX  py-6 justify-center px-6 outline outline-2 outline-graydark drop-shadow-lg rounded-md flex flex-wrap flex-col gap-2'>
-              <h1 className={clsx(
-                'font-semibold break-all ',
-                {
-                  'text-4xl': market.name.length <= 10,
-                  'text-3xl': market.name.length > 10 && market.name.length <= 20, 
-                  'text-2xl': market.name.length > 20
-                })}>
-              {market.name}
-              </h1>
-              <p className='text-sm'>Some number of options</p> 
-              {/* {market.options.toLocaleString()} */}
-            </Link>
-          )
-        })}
-        
-      </div>
+      <MarketGallery />
     </div>
   )
 }
-
-export default Page

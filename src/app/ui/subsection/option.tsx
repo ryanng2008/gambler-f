@@ -115,9 +115,9 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                     </div>
                     <div className='flex flex-row flex-wrap gap-4 items-center'>
                         <div className='NUMBER font-semibold text-white bg-gray-700 px-3 py-1 rounded-lg'>
-                            <h1>{optionItem.properties.bettingLine}</h1>
+                            <h1>{optionItem.bettingline}</h1>
                         </div>
-                        <p className='text-md'>{optionItem.desc}</p>
+                        <p className='text-md'>{optionItem.subheading}</p>
                     </div>
                 </div>
             </button>
@@ -129,7 +129,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             <h2>Under</h2>
                             <div className='BAR min-h-[64px] bg-red-400 w-full rounded-lg flex flex-row'>
                                 <button 
-                                className={`LEFT SIDE bg-white w-[50%] items-center flex justify-end rounded-l-lg border-green-300 ${selectedSide === 'left' && 'border-[3px]'}`}
+                                className={`LEFT SIDE bg-white w-[80%] items-center flex justify-end rounded-l-lg border-green-300 ${selectedSide === 'left' && 'border-[3px]'}`}
                                 onClick={() => handleSelectSide('left')}>
                                     <div className='flex flex-col mx-3 text-right'>
                                         <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && optionItem.odds}%`}</p>
@@ -137,7 +137,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                                     </div>
                                 </button>
                                 <button 
-                                className={`RIGHT SIDE bg-black text-white w-[50%] items-center flex justify-start border-green-300 rounded-r-lg ${selectedSide === 'right' && 'border-[3px]'}`}
+                                className={`RIGHT SIDE bg-black text-white w-[20%] items-center flex justify-start border-green-300 rounded-r-lg ${selectedSide === 'right' && 'border-[3px]'}`}
                                 onClick={() => handleSelectSide('right')}
                                 >
                                     <div className='flex flex-col mx-3 text-left'>
@@ -156,7 +156,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             <BetSlider 
                             onChange={handleChangeBet}
                             value={betAmount}
-                            range={[0, 50]}
+                            range={[optionItem.minbet, optionItem.maxbet]}
                             step={1}
                             />
                         </div>
