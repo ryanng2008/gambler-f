@@ -155,8 +155,8 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             
                             <BetSlider 
                             onChange={handleChangeBet}
-                            value={betAmount}
-                            range={[optionItem.minbet, optionItem.maxbet]}
+                            value={Number(betAmount)}
+                            range={[Number(optionItem.minbet), Number(optionItem.maxbet)]}
                             step={1}
                             />
                         </div>

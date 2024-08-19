@@ -78,7 +78,7 @@ export default function OptionFormClient() {
     }
 
     const onSubmit = async (form: OptionFormData) => {
-        const fixedForm = (form.minbet > form.maxbet) ? {...form, minbet: form.maxbet, maxbet: form.minbet} : form;
+        const fixedForm = (Number(form.minbet) > Number(form.maxbet)) ? {...form, minbet: form.maxbet, maxbet: form.minbet} : form;
         await fetch('/api/submit-option', {
             method: 'POST',
             headers: {
@@ -170,6 +170,10 @@ export default function OptionFormClient() {
                     <div className='justify-end flex'>
                         <button onClick={() => {
                             //"use server";
+                            //if(Number(form.minbet) > Number(form.maxbet)) {
+                            //    setForm(prevForm => ({...form, minbet: prevForm.maxbet, maxbet: prevForm.minbet}))
+                            //    console.log('inside button Activated')
+                            //}
                             onSubmit(form);
                             router.push('/home')
                         }} className='bg-gray-800 text-white font-medium py-2 px-4 rounded-lg'>
