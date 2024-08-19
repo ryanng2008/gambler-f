@@ -23,7 +23,7 @@ export default async function OptionFormWrapper() {
                 form.odds, 
                 form.minbet, 
                 form.maxbet);
-            
+            console.log('A user successfully posted an option')
             } catch (error) {
             console.error('Error in OptionFormWrapper: ', error);
         }
