@@ -1,7 +1,7 @@
 'use client';
 import Option from '@/app/ui/subsection/option'
 import { useState } from 'react'
-import { options, subsections } from '../../../../trash/mock-data/data'
+//import { options, subsections } from '../../../../trash/mock-data/data'
 import { OptionType } from '@/app/lib/types'
 import Image from 'next/image';
 
