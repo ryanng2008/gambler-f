@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 export default async function OptionFormWrapper() {
     // async function handleSubmit(form: any) {
-    //     const result = await postOption(form.heading, form.desc, form.optiontype, '', form.odds, form.minbet, form.maxbet);
+    //     const result = await postOption(form.heading, form.subheading, form.optiontype, '', form.odds, form.minbet, form.maxbet);
     //         console.log('Done posting option');
 
     // }
@@ -16,7 +16,7 @@ export default async function OptionFormWrapper() {
         try {
             const optionPost = await postOption(
                 form.heading, 
-                form.desc, 
+                form.subheading, 
                 form.optiontype, 
                 form.bettingline, 
                 '', 

@@ -117,7 +117,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                         <div className='NUMBER font-semibold text-white bg-gray-700 px-3 py-1 rounded-lg'>
                             <h1>{optionItem.bettingline}</h1>
                         </div>
-                        <p className='text-md'>{optionItem.desc}</p>
+                        <p className='text-md'>{optionItem.subheading}</p>
                     </div>
                 </div>
             </button>

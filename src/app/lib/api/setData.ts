@@ -16,11 +16,11 @@ export async function postSubsection(code: string, name: string, options: string
     }
 }
 
-export async function postOption(heading: string, desc: string, optiontype: string, bettingline: number, imagelink: string, odds=50, minbet=0, maxbet=0) {
+export async function postOption(heading: string, subheading: string, optiontype: string, bettingline: number, imagelink: string, odds=50, minbet=0, maxbet=0) {
     try {
         const insertedOption = await sql`
-            INSERT INTO options (heading, desc, optiontype, bettingline, imagelink, odds, minbet, maxbet) VALUES
-                (${heading}, ${desc}, ${optiontype}, ${bettingline}, ${imagelink}, ${odds}, ${minbet}, ${maxbet});
+            INSERT INTO options (heading, subheading, optiontype, bettingline, imagelink, odds, minbet, maxbet) VALUES
+                (${heading}, ${subheading}, ${optiontype}, ${bettingline}, ${imagelink}, ${odds}, ${minbet}, ${maxbet});
         `
         console.log('Finished posting option')
         return insertedOption;

@@ -12,7 +12,7 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
         marketCode: 'main',
         subsectionCode: '000003',
         heading: '',
-        desc: '',
+        subheading: '',
         optiontype: 'ou',
         minbet: 0,
         maxbet: 0,
@@ -47,7 +47,7 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
 
 
 
-    const AbstractOption = ({ heading, bettingLine, desc }: {heading: string, bettingLine: string, desc: string}) => {
+    const AbstractOption = ({ heading, bettingLine, subheading }: {heading: string, bettingLine: string, subheading: string}) => {
         return (
         <div className='block'>
             <button className={` O/U H/M OPTION w-[100%] py-4 px-2 grid grid-cols-5 gap-2 drop-shadow-xl bg-gray-300 rounded-xl text-left`}>
@@ -67,7 +67,7 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
                         { bettingLine && <div className='NUMBER font-semibold text-white bg-gray-700 px-3 py-1 rounded-lg'>
                             <h1>{bettingLine}</h1>
                         </div>}
-                        <p className='text-md'>{desc}</p>
+                        <p className='text-md'>{subheading}</p>
                     </div>
                 </div>
             </button>
@@ -100,14 +100,14 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 mr-8">
-                            <h2 className="text-md font-normal">Description</h2>
-                            <textarea name='desc' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100" maxLength={40} placeholder='Points + Rebounds + Assists' value={form.desc} onInput={handleChange} />
+                            <h2 className="text-md font-normal">Description (subheading)</h2>
+                            <textarea name='subheading' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100" maxLength={40} placeholder='Points + Rebounds + Assists' value={form.subheading} onInput={handleChange} />
                         </div>
                     </div>
                     
                 </div>
                 <div className="BET TYPE SPECIFIC CONTENT space-y-6 mr-12">
-                    <AbstractOption heading={form.heading} bettingLine={form.bettingline!.toString()} desc={form.desc}/>
+                    <AbstractOption heading={form.heading} bettingLine={form.bettingline!.toString()} subheading={form.subheading}/>
                     <h2 className="text-xl font-semibold">Details</h2>
                     <div className="OPTION DETAILS FORMS grid grid-cols-2 gap-8"> 
                         {/* Fields for Hit/Miss & Over/Under */}
