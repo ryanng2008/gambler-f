@@ -54,7 +54,7 @@ export const subsections = [
     },
 ]
 
-export const options: OptionType[] = [
+export const options = [
     {
         id: '000000',
         type: 'hm',

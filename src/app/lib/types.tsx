@@ -8,7 +8,7 @@ export interface OptionType {
     choices?: string[],
     odds: number | -1, // number signifies h / o ; set up for pick the winner in a sec.
     minbet: number,
-    maxet: number,
+    maxbet: number,
 
 }
 

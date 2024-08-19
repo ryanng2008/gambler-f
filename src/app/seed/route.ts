@@ -48,7 +48,7 @@ async function seedUsers() {
             //const formattedBets = `{${user.bets.map(bet => `"${bet}"`).join(',')}}`;
             return client.sql`
             INSERT INTO users (username, bets) VALUES
-                (${user.username}, ARRAY[${user.bets}])  
+                (${user.username}, ARRAY[${`${user.bets}`}])  
             ` // This ARRAY constructor is fucked up.
         })
     );
@@ -88,7 +88,7 @@ async function seedMarkets() {
         markets.map(async (market) => {
             return client.sql`
             INSERT INTO markets (code, name, subsections) VALUES
-                (${market.code}, ${market.name}, ${market.subsections}]);
+                (${market.code}, ${market.name}, ${`${market.subsections}`}]);
             `
         })
     )
@@ -108,7 +108,7 @@ async function seedSubsections() {
         subsections.map(async (subsection) => {
             return client.sql`
             INSERT INTO subsections (code, name, date, time, options) VALUES
-                (${subsection.code}, ${subsection.name}, ${subsection.date}, ${subsection.time}, ARRAY[${subsection.options}]);
+                (${subsection.code}, ${subsection.name}, ${subsection.date}, ${subsection.time}, ARRAY[${`${subsection.options}`}]);
             `
         })
     )
@@ -116,18 +116,19 @@ async function seedSubsections() {
 }
 
 export async function GET() {
-    try {
-        await client.sql`BEGIN`;   
-        await seedOptions();
-        //await seedUsers();
-        //await seedBets();
-        //await seedSubsections();
-        //await seedMarkets();
-        await client.sql`COMMIT`;
+    // try {
+    //     await client.sql`BEGIN`;   
+    //     await seedOptions();
+    //     //await seedUsers();
+    //     //await seedBets();
+    //     //await seedSubsections();
+    //     //await seedMarkets();
+    //     await client.sql`COMMIT`;
         
-        return Response.json({ message: 'Database seeded successfully' });
-    } catch (error) {
-        await client.sql`ROLLBACK`;
-        return Response.json({ error }, { status: 500 });
-    }
+    //     return Response.json({ message: 'Database seeded successfully' });
+    // } catch (error) {
+    //     await client.sql`ROLLBACK`;
+    //     return Response.json({ error }, { status: 500 });
+    // }
+    return Response.json({ message: 'What do you want?' });
 }
