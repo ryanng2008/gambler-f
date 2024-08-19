@@ -1,4 +1,4 @@
-import OptionFormWrapper from "@/app/ui/create/optionFormWrapper"
+import OptionFormClient from "@/app/ui/create/optionFormClient"
 
 export default async function Page() {
 
@@ -7,7 +7,7 @@ export default async function Page() {
             <div className="HEAD">
                 <h1 className="text-5xl font-semibold">Create an option</h1>
             </div>
-            <OptionFormWrapper />
+            <OptionFormClient />
         </div>
 
     )

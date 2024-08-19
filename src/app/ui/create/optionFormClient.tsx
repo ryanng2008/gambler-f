@@ -1,13 +1,16 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { OptionFormData } from '@/app/lib/types';
+//import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation'
 
-type OptionFormSubmitHandler = (form: OptionFormData) => void;
+// type OptionFormSubmitHandler = (form: OptionFormData) => void;
 
-export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
+export default function OptionFormClient() {
     const router = useRouter();
+    // { onSubmit }: { onSubmit: any }
+    //const router = useRouter();
     const [form, setForm] = useState<OptionFormData>({
         marketCode: 'main',
         subsectionCode: '000003',
@@ -59,7 +62,7 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
                     height={80}
                     width={80}/>
                 </div>
-                <div className='col-span-4 grid grid-rows-2 gap-1 items-center'>
+                <div className='col-span-4 grid grid-rows-2 gap-1 items-center overflow-clip'>
                     <div>
                         <h1 className='text-3xl font-semibold'>{heading}</h1>
                     </div>
@@ -72,6 +75,17 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
                 </div>
             </button>
         </div>)
+    }
+
+    const onSubmit = async (form: OptionFormData) => {
+        const fixedForm = (form.minbet > form.maxbet) ? {...form, minbet: form.maxbet, maxbet: form.minbet} : form;
+        await fetch('/api/submit-option', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(fixedForm)
+        })
     }
     return (
             <div className="FORM CONTENT md:grid flex flex-col grid-cols-2 gap-8">
@@ -92,7 +106,7 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
                         <div className="flex flex-row">
                             <div className="flex flex-col gap-2 mr-8">
                                 <h2 className="text-md font-normal">Heading</h2>
-                                <input name='heading' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100 md:max-w-[100%]" maxLength={15} type="text" placeholder='J. Johnson' value={form.heading} onInput={handleChange}/>
+                                <input name='heading' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100 md:max-w-[100]" maxLength={15} type="text" placeholder='J. Johnson' value={form.heading} onInput={handleChange}/>
                             </div>
                             <div className="flex flex-col gap-3 mr-8">
                                 <h2 className="text-md font-normal">Type of option (dropdown)</h2>
@@ -155,6 +169,7 @@ export default function OptionFormClient({ onSubmit }: { onSubmit: any }) {
                     </div>
                     <div className='justify-end flex'>
                         <button onClick={() => {
+                            //"use server";
                             onSubmit(form);
                             router.push('/home')
                         }} className='bg-gray-800 text-white font-medium py-2 px-4 rounded-lg'>

@@ -71,7 +71,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
     const truePayoutRate = selectedSide === 'left' ? overPayoutRate : (selectedSide === 'right' ? 1/overPayoutRate : 0);
     const payoutPercent = selectedSide === 'right' ? Math.round(overPayoutRate * 1000)/10 : Math.round(1/overPayoutRate * 1000)/10;
     const oddsRatio = (selectedSide === 'left') ? reduceRatio(optionItem.odds, 100 - optionItem.odds) : ((selectedSide === 'right') ? reduceRatio(100 - optionItem.odds, optionItem.odds) : '0:0');
-
+    const leftLength = optionItem.odds > 80 ? 80 : optionItem.odds;
     function handleSelectSide(side: string) {
         if(side == selectedSide) {
             setSelectedSide('0');
@@ -129,7 +129,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             <h2>Under</h2>
                             <div className='BAR min-h-[64px] bg-red-400 w-full rounded-lg flex flex-row'>
                                 <button 
-                                className={`LEFT SIDE bg-white w-[80%] items-center flex justify-end rounded-l-lg border-green-300 ${selectedSide === 'left' && 'border-[3px]'}`}
+                                className={`LEFT SIDE bg-white w-[50%] items-center flex justify-end rounded-l-lg border-green-300 ${selectedSide === 'left' && 'border-[3px]'}`}
                                 onClick={() => handleSelectSide('left')}>
                                     <div className='flex flex-col mx-3 text-right'>
                                         <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && optionItem.odds}%`}</p>
@@ -137,7 +137,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                                     </div>
                                 </button>
                                 <button 
-                                className={`RIGHT SIDE bg-black text-white w-[20%] items-center flex justify-start border-green-300 rounded-r-lg ${selectedSide === 'right' && 'border-[3px]'}`}
+                                className={`RIGHT SIDE bg-black text-white w-[50%] items-center flex justify-start border-green-300 rounded-r-lg ${selectedSide === 'right' && 'border-[3px]'}`}
                                 onClick={() => handleSelectSide('right')}
                                 >
                                     <div className='flex flex-col mx-3 text-left'>
