@@ -136,7 +136,7 @@ export default function OptionFormClient() {
                                 </div>
                                 <div className="">
                                     <h3 className="text-sm py-2">Maximum bet</h3>
-                                    <input name='maxbet' className="py-1 px-2 rounded-lg text-sm outline-gray-100 max-w-full" value={form.maxbet} onInput={handleChange} type="number" placeholder='100'/>
+                                    <input name='maxbet' className="py-1 px-2 rounded-lg text-sm outline-gray-100 max-w-full" value={form.maxbet} onInput={handleChange} type="number" placeholder='100' max={999999999}/>
                                 </div>
                             </div>
                         </div>
