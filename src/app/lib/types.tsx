@@ -26,7 +26,10 @@ export interface OptionFormData {
     maxbet: number,
 }
 
-
+export interface User {
+    username: string,
+    id: string,
+}
 
 
 export interface FlatOptionType {

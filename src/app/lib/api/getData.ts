@@ -64,7 +64,19 @@ export async function fetchUserId(id: string) { // fetch one user row from its i
 }
 
 export async function fetchUser(username: string) {
-    
+    console.log('we touched this')
+    try {
+        const data = await sql`
+            SELECT * FROM users
+            WHERE username = ${username}
+        `
+        console.log(`fetching user ${username} completed`)
+        console.log(data.rows[0])
+        return data.rows[0];
+    } catch (error) {
+        console.error('Database Error: ', error)
+        throw new Error(`Failed to fetch user data using username ${username}.`);
+    }
 }
 
 export async function fetchBets() {

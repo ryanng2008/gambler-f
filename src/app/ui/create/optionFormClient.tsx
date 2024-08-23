@@ -86,6 +86,9 @@ export default function OptionFormClient() {
             },
             body: JSON.stringify(fixedForm)
         })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Failed to post option form (in onSubmit handler): ', error))
     }
     return (
             <div className="FORM CONTENT md:grid flex flex-col grid-cols-2 gap-8">

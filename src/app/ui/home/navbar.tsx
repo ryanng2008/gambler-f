@@ -1,19 +1,61 @@
+'use client' 
 import Image from 'next/image'
 import Link from 'next/link';
-import clsx from 'clsx';
-
+import AuthContext from '@/app/context/authContext';
+import { useContext, useEffect, useState } from 'react'
+import { UserCircleIcon } from '@heroicons/react/24/solid';
+import { UserCircleIcon as OutlineUser } from '@heroicons/react/24/outline';
 
 export default function Navbar() {
 
+    const { user, setUser } = useContext(AuthContext);
+    const [balance, setBalance] = useState<number>(0);
+    console.log('user:')
+    console.log(user);
     const links = [
         {name: 'Browse', href: '/home/explore'},
         {name: 'Create', href: '/home/create'}
     ]
+    const answer = fetch('')
+    async function fetchBalance(userString: string) {
+        try {
+            const response = await fetch(`/api/user?username=${encodeURIComponent(userString)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (!response.ok) throw new Error('Failed to fetch balance');
+            const data = await response.json();
+            if (data.balance) {
+                setBalance(data.balance);
+            } else {
+                setBalance(0);
+            }
+        } catch (error) {
+            console.error('Error fetching balance in Navbar component:', error);
+        }
+    }
+    useEffect(() => {
+        console.log('SELLING THAT RERUN')
+        fetchBalance(user);
+    }, [user])
 
-    const cash = 100
+    //useEffect(() => {
+    //    async () => {
+    //        console.log('ran again')
+    //        try {
+    //            const fetchedUserObject = await fetchUser(user);
+    //            setUserObject(fetchedUserObject);
+    //        } catch (error) {
+    //            console.error('Error fetching user in the useEffect: ', error)
+    //        }
+    //        
+    //    }
+    //}, [user])
     return (
         <div className="navbar grid grid-cols-3 justify-center items-center justiFFy-between bg-[#98A869] rounded-3xl text-white my-6 px-[5%] py-2 drop-shadow-xl overflow-hidden">
-                <div className='flex'>
+                <div className='flex gap-4'>
                 <Link href="/home">
                     <Image 
                     src="/lebron.png" 
@@ -22,6 +64,15 @@ export default function Navbar() {
                     width={64} 
                     height={64} />
                 </Link>
+                <div className='my-auto flex flex-row gap-1 md:px-12 px-2'>
+                    {user 
+                    ? (<>
+                    <p>Logged in as</p>
+                    <p className='font-semibold'>{user}</p>
+                    </>
+                    ) : <p>Not logged in</p>
+                    }
+                </div>
                 </div>
                 <div className='BUTTONS flex flex-row md:gap-12 gap-4 justify-center drop-shadow-lg'>
                     {links.map((link) => {
@@ -35,15 +86,25 @@ export default function Navbar() {
                 </div>
                 <div className='OTHER ITEMS flex flex-row gap-12 justify-end'>
                     <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden md:block'>
-                        <p>{`$${cash.toLocaleString()}`}</p>
+                        <p>{`$${balance.toLocaleString()}`}</p>
                     </div>
-                    <Image 
+                    {
+                        (user == null) ?
+                        <Link href='/home/account/login'>
+                           <OutlineUser className='h-12 hover:scale-105 duration-300'/> 
+                        </Link> :
+                        <Link href='/home/account/logout'>
+                            <UserCircleIcon className='h-12 hover:scale-105 duration-300' />
+                        </Link>
+                    }
+
+                    {/* <Image 
                     src="/menu.svg"
                     alt="Menu Button"
                     className='drop-shadow-lg'
                     width={64}
                     height={64}
-                    />
+                    /> */}
                 </div>
             </div>
     )
