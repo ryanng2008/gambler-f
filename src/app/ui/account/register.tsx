@@ -13,7 +13,7 @@ export default function Register({ switchPage }: { switchPage: (pageName: string
     async function onRegister() {
         //console.log('PASSWORD')
         //console.log(form.password)
-        const registerAccount = await handleRegister(form.username, form.password);
+        const registerAccount = await handleRegister(form.username.trim(), form.password.trim());
         if(registerAccount.success) {
             setSuccess(true);
             setUser(form.username)
@@ -43,7 +43,9 @@ export default function Register({ switchPage }: { switchPage: (pageName: string
                         placeholder='Username'
                         className='py-1 px-2 rounded-lg inline text-lg max-w-[300px]'
                         value={form.username} 
-                        onChange={e => setForm({...form, username: e.target.value})} 
+                        onChange={e => setForm({
+                            ...form, 
+                            username: e.target.value})} 
                         // setCredentials({...credentials, username: e.target.value})
                         />
                         <input 
@@ -51,12 +53,16 @@ export default function Register({ switchPage }: { switchPage: (pageName: string
                         placeholder='Password'
                         className='py-1 px-2 rounded-lg inline text-lg max-w-[300px]'
                         value={form.password} 
-                        onChange={e => setForm({...form, password: e.target.value})} 
+                        onChange={e => setForm({
+                            ...form, 
+                            password: e.target.value})} 
                         // setCredentials({...credentials, username: e.target.value})
                         />
                         {message && <p>{message}</p>}
                         <div className='my-2'>
-                            <button onClick={() => onRegister()} className='inline py-1 px-4 bg-gray-600 text-white text-large font-medium rounded-lg'>
+                            <button onClick={() => {
+                                onRegister()
+                            }} className='inline py-1 px-4 bg-gray-600 text-white text-large font-medium rounded-lg'>
                                 Register
                             </button>
                         </div>
