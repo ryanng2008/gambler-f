@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { OptionFormData } from '@/app/lib/types';
 //import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation'
+import { handleSubmitOption } from '@/app/lib/api';
 
 // type OptionFormSubmitHandler = (form: OptionFormData) => void;
 
@@ -78,17 +79,7 @@ export default function OptionFormClient() {
     }
 
     const onSubmit = async (form: OptionFormData) => {
-        const fixedForm = (Number(form.minbet) > Number(form.maxbet)) ? {...form, minbet: form.maxbet, maxbet: form.minbet} : form;
-        await fetch('/api/submit-option', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(fixedForm)
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error('Failed to post option form (in onSubmit handler): ', error))
+        await handleSubmitOption(form);
     }
     return (
             <div className="FORM CONTENT md:grid flex flex-col grid-cols-2 gap-8">

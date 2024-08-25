@@ -2,7 +2,7 @@
 import clsx from 'clsx'
 //import { markets }  from '@/app/mock-data/data'
 import Link from 'next/link'
-import { fetchMarkets } from '@/app/lib/api/getData';
+import { fetchMarkets } from '@/app/lib/data/getData';
 import { unstable_noStore as noStore } from 'next/cache';
 
 

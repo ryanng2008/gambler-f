@@ -1,34 +1,32 @@
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '@/app/context/authContext';
+import { handleLogin } from '@/app/lib/api';
 
 
 
 export default function Login({ switchPage }: { switchPage: (pageName: string) => void; }) {
     const { user, setUser } = useContext(AuthContext);
-    const [input, setInput] = useState('');
+    const [form, setForm] = useState({
+        username: '',
+        password: ''
+    });
+    //const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState('');
-    async function onLogin() { 
-        await fetch(`/api/auth/login?username=${encodeURIComponent(input)}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.exists) {
-                setUser(input); // when you fix, it wil\
-                setMessage(`Successfully logged in as ${input} (until you refresh or leave the page)`)
-                //console.log(`Successfully logged in as ${input} - user Context: ${user}`)
-            } else {
-                setMessage(`Login failed - try to register an account instead`)
-            }
-        })
-        .catch(error => console.error('Failed to Login (in onSubmit handler): ', error))
+    
+    async function onLogin() {
+        const loginAccount = await handleLogin(form.username, form.password);
+        if(loginAccount.success) {
+            //setSuccess(true);
+            setMessage('Successfully logged in!')
+            setUser(form.username);
+        } else {
+            setMessage(`${loginAccount.message}`)
+        }
     }
     useEffect(() => {
         setMessage('');
-    }, [input])
+    }, [form])
+    
     return (
         <>
             {
@@ -42,19 +40,23 @@ export default function Login({ switchPage }: { switchPage: (pageName: string) =
                         <h1 className="text-4xl font-semibold">Log in</h1>
                     </div>
                     <div className="BODY gap-4 justify-start">
-                        <div className='flex flex-col gap-4'>
-                            <div>
-                                <input 
-                                type="text" 
-                                placeholder='Username'
-                                className='py-1 px-2 rounded-lg inline '
-                                value={input} 
-                                onChange={e => setInput(e.target.value)} 
-                                // setCredentials({...credentials, username: e.target.value})
-                                />
-                            </div>
+                        <div className='flex flex-col gap-2'>
+                            <input 
+                            type="text" 
+                            placeholder='Username'
+                            className='py-1 px-2 rounded-lg inline text-lg max-w-[300px]'
+                            value={form.username} 
+                            onChange={e => setForm({...form, username: e.target.value})} 
+                            />
+                            <input 
+                            type="text" 
+                            placeholder='Password'
+                            className='py-1 px-2 rounded-lg inline text-lg max-w-[300px]'
+                            value={form.password} 
+                            onChange={e => setForm({...form, password: e.target.value})} 
+                            />
                             {message && <p>{message}</p>}
-                            <div className=''>
+                            <div className='my-2'>
                                 <button onClick={() => onLogin()} className='inline py-1 px-4 bg-gray-600 text-white text-large font-medium rounded-lg'>
                                     Log in
                                 </button>

@@ -1,4 +1,4 @@
-import { postOption } from '@/app/lib/api/setData'
+import { postOption } from '@/app/lib/data/setData'
 import { OptionFormData } from '@/app/lib/types';
 import { sql } from '@vercel/postgres';
 

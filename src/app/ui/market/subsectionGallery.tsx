@@ -1,7 +1,7 @@
 "use server";
 import Link from 'next/link'
 //import { markets, subsections } from '../../../../trash/mock-data/data'
-import { fetchMarket, fetchMarketSubsections, fetchSpecOptions, fetchSubsectionsObjects } from '@/app/lib/api/getData'
+import { fetchMarket, fetchMarketSubsections, fetchSpecOptions, fetchSubsectionsObjects } from '@/app/lib/data/getData'
 import { unstable_noStore as noStore } from 'next/cache';
 
 

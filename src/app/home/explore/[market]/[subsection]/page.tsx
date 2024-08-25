@@ -1,5 +1,5 @@
 'use server';
-import { postSubsection } from '@/app/lib/api/setData';
+import { postSubsection } from '@/app/lib/data/setData';
 import OptionsGalleryWrapper from '@/app/ui/subsection/optionsGalleryWrapper';
 import { unstable_noStore } from 'next/cache';
 

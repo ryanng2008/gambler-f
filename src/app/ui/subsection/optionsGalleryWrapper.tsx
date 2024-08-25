@@ -1,5 +1,5 @@
 'use server';
-import { fetchOptions, fetchSpecOptions, fetchSubsection } from '@/app/lib/api/getData';
+import { fetchOptions, fetchSpecOptions, fetchSubsection } from '@/app/lib/data/getData';
 import OptionsGalleryClient from './optionsGalleryClient'; 
 import { unstable_noStore as noStore } from 'next/cache';
 import { OptionType } from '@/app/lib/types';

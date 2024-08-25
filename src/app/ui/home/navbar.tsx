@@ -5,35 +5,23 @@ import AuthContext from '@/app/context/authContext';
 import { useContext, useEffect, useState } from 'react'
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { UserCircleIcon as OutlineUser } from '@heroicons/react/24/outline';
+import { fetchUserBalance } from '@/app/lib/api';
 
 export default function Navbar() {
-
     const { user, setUser } = useContext(AuthContext);
     const [balance, setBalance] = useState<number>(0);
-    console.log('user:')
-    console.log(user);
+    //console.log('user:')
+    //console.log(user);
     const links = [
         {name: 'Browse', href: '/home/explore'},
         {name: 'Create', href: '/home/create'}
     ]
-    const answer = fetch('')
     async function fetchBalance(userString: string) {
         try {
-            const response = await fetch(`/api/user?username=${encodeURIComponent(userString)}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-            if (!response.ok) throw new Error('Failed to fetch balance');
-            const data = await response.json();
-            if (data.balance) {
-                setBalance(data.balance);
-            } else {
-                setBalance(0);
-            }
+            const balanceData = await fetchUserBalance(userString);
+            setBalance(balanceData);
         } catch (error) {
-            console.error('Error fetching balance in Navbar component:', error);
+            console.error(error)
         }
     }
     useEffect(() => {
@@ -85,18 +73,16 @@ export default function Navbar() {
                     })}
                 </div>
                 <div className='OTHER ITEMS flex flex-row gap-12 justify-end'>
-                    <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden md:block'>
+                    {user != null && <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden md:block'>
                         <p>{`$${balance.toLocaleString()}`}</p>
-                    </div>
+                    </div>}
+                    <Link href='/home/account/'>
                     {
-                        (user == null) ?
-                        <Link href='/home/account/login'>
-                           <OutlineUser className='h-12 hover:scale-105 duration-300'/> 
-                        </Link> :
-                        <Link href='/home/account/logout'>
-                            <UserCircleIcon className='h-12 hover:scale-105 duration-300' />
-                        </Link>
+                        (user == null) 
+                        ? <OutlineUser className='h-12 hover:scale-105 duration-300'/> 
+                        : <UserCircleIcon className='h-12 hover:scale-105 duration-300' />
                     }
+                    </Link>
 
                     {/* <Image 
                     src="/menu.svg"

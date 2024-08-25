@@ -1,4 +1,4 @@
-import { fetchMarket, fetchSubsectionsObjects } from '@/app/lib/api/getData'
+import { fetchMarket, fetchSubsectionsObjects } from '@/app/lib/data/getData'
 //import Image from 'next/image'
 import SubsectionGallery from '@/app/ui/market/subsectionGallery';
 

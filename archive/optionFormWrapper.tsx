@@ -1,7 +1,7 @@
 'use server';
 //import { useRouter } from 'next/navigation';
 
-import { postOption } from "@/app/lib/api/setData";
+import { postOption } from "@/app/lib/data/setData";
 import OptionFormClient from "@/app/ui/create/optionFormClient";
 import { redirect } from "next/navigation";
 

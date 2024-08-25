@@ -1,4 +1,4 @@
-import { fetchUser } from "@/app/lib/api/getData";
+import { fetchUser } from "@/app/lib/data/getData";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
