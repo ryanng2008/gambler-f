@@ -75,7 +75,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
     const oddsRatio = (selectedSide === 'left') ? reduceRatio(optionItem.odds, 100 - optionItem.odds) : ((selectedSide === 'right') ? reduceRatio(100 - optionItem.odds, optionItem.odds) : '0:0');
     const leftLength = optionItem.odds > 80 ? 80 : optionItem.odds;
     const [success, setSuccess] = useState(false);
-    function handleSelectSide(side: string) {
+    function handleSelectSide(side: 'left' | 'right') {
         if(side == selectedSide) {
             setSelectedSide('0');
         } else {
