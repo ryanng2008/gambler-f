@@ -1,12 +1,13 @@
 import Image from 'next/image'
-import { useState, forwardRef, DragEvent } from 'react'
+import { useState, forwardRef, useContext } from 'react'
 import {
     Slider as BaseSlider,
-    SliderThumbSlotProps,
     SliderProps,
   } from '@mui/base/Slider';
+import AuthContext from '@/app/context/authContext';
 import { OptionType } from '@/app/lib/types'
 import { reduceRatio } from '@/app/lib/utils'
+import { placeBet } from '@/app/lib/api';
 
 const Slider = forwardRef(function Slider(
         props: SliderProps,
@@ -65,13 +66,15 @@ function BetSlider({ onChange, value, range, step }:
 
 export default function Option({ open, onOpen, optionItem }: { open: boolean, onOpen: any, optionItem: OptionType }) {
     // const [selected, setSelected] = useState(false); // pull this up to PAGE which will select selected component
-    const [selectedSide, setSelectedSide] = useState<string>('0');
+    const { user, setUser } = useContext(AuthContext);
+    const [selectedSide, setSelectedSide] = useState<'left' | 'right' | '0'>('0');
     const [betAmount, setBetAmount] = useState<number>(0);
     const overPayoutRate = (100/ optionItem.odds) - 1;
     const truePayoutRate = selectedSide === 'left' ? overPayoutRate : (selectedSide === 'right' ? 1/overPayoutRate : 0);
-    const payoutPercent = selectedSide === 'right' ? Math.round(overPayoutRate * 1000)/10 : Math.round(1/overPayoutRate * 1000)/10;
+    const payoutPercent = selectedSide === 'left' ? Math.round(overPayoutRate * 1000)/10 : Math.round(1/overPayoutRate * 1000)/10;
     const oddsRatio = (selectedSide === 'left') ? reduceRatio(optionItem.odds, 100 - optionItem.odds) : ((selectedSide === 'right') ? reduceRatio(100 - optionItem.odds, optionItem.odds) : '0:0');
     const leftLength = optionItem.odds > 80 ? 80 : optionItem.odds;
+    const [success, setSuccess] = useState(false);
     function handleSelectSide(side: string) {
         if(side == selectedSide) {
             setSelectedSide('0');
@@ -81,6 +84,18 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
     }
     function handleChangeBet(e: any) {
         setBetAmount(e.target.value);
+    }
+    async function onSubmit() {
+        // TODO: CONVERT "over" into "o", etc
+        // bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',
+        const side = (selectedSide === 'right') ? 'u' : 'o';
+        const betPlacement = await placeBet(user, optionItem.id, betAmount, truePayoutRate, side);
+        if(betPlacement.success) {
+            console.log('Success!')
+            setSuccess(true);
+        } else {
+            console.log('Failed')
+        }
     }
     //if(!visible) {
     //    return <div></div>
@@ -122,8 +137,13 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                 </div>
             </button>
             <div className={`overflow-hidden duration-1000 ease-in-out ${open ? 'max-h-[600px]' : 'max-h-0'}`}>
-                <div className='px-8 py-6 flex flex-col gap-4'>
-                    <div className='space-y-4'>
+                {
+                    success 
+                    ?
+                    <div className='text-center mx-auto my-12'><p className=''>Success</p></div> 
+                    : 
+                    <div className='px-8 py-6 flex flex-col gap-4'>
+                        <div className='space-y-4'>
                         <h1 className='font-semibold text-lg'>Pick a side</h1>
                         <div className='BAR CONTAINER bg-blue-300 rounded-lg p-4 flex flex-row justify-between items-center gap-4'>
                             <h2>Under</h2>
@@ -148,8 +168,8 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             </div>
                             <h2>Over</h2>
                         </div>
-                    </div>
-                    <div className='space-y-4 flex flex-col'>
+                        </div>
+                        <div className='space-y-4 flex flex-col'>
                         <h1 className='font-semibold text-lg'>Stake</h1>
                         <div className='space-y-1'>
                             
@@ -165,11 +185,16 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             <Card title='Payout %' bigContent={(selectedSide === 'left' || selectedSide === 'right') ? `${payoutPercent}%` : 'N/A'}/>
                             <Card title='Win Profit' bigContent={`$${Math.round(betAmount * truePayoutRate * 100) / 100}`}/>
                         </div>
+                        </div>
+                        <div className='SUBMIT BUTTON mx-4 text-right my-2'>
+                        <button 
+                            className='bg-gray-600 text-white py-2 px-4 font-medium rounded-lg'
+                            onClick={onSubmit}
+                            ><p>Place bet</p></button>
+                        </div>
                     </div>
-                    <div className='SUBMIT BUTTON mx-4 text-right my-2'>
-                        <button className='bg-gray-600 text-white py-2 px-4 font-medium rounded-lg'><p>Place bet</p></button>
-                    </div>
-                </div>
+                }
+                
             </div>
         </div>
         

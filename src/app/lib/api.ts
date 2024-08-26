@@ -107,3 +107,32 @@ export async function handleSubmitOption(form: OptionFormData) {
     .then(data => console.log(data))
     .catch(error => console.error('Failed to post option form (in onSubmit handler): ', error))
 }
+
+export async function placeBet(bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',) { // ADD THE CONTENT
+    // bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',
+    // Synchronise with API route
+    try {
+        const response = await fetch(`/api/place-bet`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ bettorUser, optionId, betAmount, payoutRate, side }),
+        });
+        if(response.status === 409) {
+            return { success: false, message: 'Database Conflict' };
+        }
+        if (!response.ok) {
+            // If the response is not ok, throw an error with the status text
+            const errorText = await response.text();
+            throw new Error(`Post bet failed failed: ${errorText}`);
+        }
+        const data = await response.json();
+        return { success: true, data, message: 'Success!' };
+    } catch (error) {
+        console.error('Error in placing bet:', error);
+        return { success: false, message: error};
+    }
+    // Run the postBet - check for successful response
+    //
+}

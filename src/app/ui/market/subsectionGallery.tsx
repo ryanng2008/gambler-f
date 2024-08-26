@@ -8,10 +8,8 @@ import { unstable_noStore as noStore } from 'next/cache';
 export default async function SubsectionGallery({ marketCode }: { marketCode: string }) {
     noStore();
     const marketObject = await fetchMarket(marketCode);
-    //console.log(`done fetching market ${marketCode}`)
-    //console.log(marketObject)
-    const subsectionCodes = await fetchMarketSubsections(marketCode); // this is working
-    const subsectionObjects = await fetchSubsectionsObjects(subsectionCodes); // this is ad hoc with multiple queries
+    //const subsectionCodes = await fetchMarketSubsections(marketCode); // this is working
+    const subsectionObjects = await fetchSubsectionsObjects(marketCode); // this is ad hoc with multiple queries
     
     const subItems = subsectionObjects.map((subsectionObject) => { // maybe u can move the fetches into here.
         return (

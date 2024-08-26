@@ -139,37 +139,23 @@ export async function fetchMarket(code: string) {
     }
 }
 
-export async function fetchSubsectionsObjects(codes: string[]) { // Currently ad hoc method with lots of fetches, very inefficient. Need to find way to fix the template literal reading of sql function
+export async function fetchSubsectionsObjects(marketCode: string) { // Currently ad hoc method with lots of fetches, very inefficient. Need to find way to fix the template literal reading of sql function
     try {
-        const data = await Promise.all(
-            codes.map(async (code) => {
-                const subsectionObject = await sql`
-                    SELECT * from subsections
-                    WHERE code = ${code};
-                    `
-                console.log(`Finished fetching subsection ${code}`)
-                //console.log(subsectionObject.rows)
-                return subsectionObject.rows[0];
-            })
-        )
-        return data;
+        const bulkData = await sql`
+            SELECT * from subsections
+            WHERE code = ANY (
+                SELECT unnest(subsections)
+                FROM markets
+                WHERE code = ${marketCode}
+            )
+        `
+        console.log('Fetching subsections from codes completed.');
+        return bulkData.rows;
     } catch (error) {
-        console.error('Database fetch subsections from codes array error: ', error);
-        throw new Error(`Failed to fetch subsections from ${codes}`); 
+        console.error('Database fetch subsections from marketCode error: ', error);
+        throw new Error(`Failed to fetch subsections from ${marketCode}`); 
+        //return Response.json({ message: error })
     }
-
-    // OLD BULK MAP
-
-    //try {
-    //    const codeString = codes.map(code => `'${code}'`).join(', ');
-    //    // because sql function interprets the codeString as ONE item. 
-    //    const data = await sql`SELECT * from subsections WHERE code = ANY ('{"000000", "000001"}');`;
-    //    console.log('Fetching subsections from codes completed.');
-    //    return data.rows;
-    //} catch (error) {
-    //    console.error('Database fetch subsections from codes array error: ', error);
-    //    throw new Error(`Failed to fetch subsections from ${codes}`);
-    //}
 }
 
 export async function fetchSubsection(code: string) {
