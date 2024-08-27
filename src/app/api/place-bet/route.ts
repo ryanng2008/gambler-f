@@ -9,7 +9,7 @@ export async function POST(request: any) {
         if(data && data.length > 0) {
             const betId = data[0].id;
             try {
-                const appendToUser = await addBetToUser('yannick123', betId);
+                const appendToUser = await addBetToUser(bettorUser, betId);
                 return new Response(JSON.stringify(appendToUser), { status: 201 });
             } catch (error) {
                 return new Response(JSON.stringify(error), { status: 500 });

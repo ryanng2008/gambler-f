@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
         const userObject = await fetchUser(username);
         return NextResponse.json(userObject);
     } catch (error) {
-        console.error('What? ', error)
+        console.error('Likely not logged in ', error)
         return NextResponse.json({ message: `Error from API route /user: ${error}`})
     }
 }

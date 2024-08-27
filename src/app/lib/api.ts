@@ -1,3 +1,4 @@
+import { fetchUserBets, fetchUserBetsOptions } from "./data/getData";
 import { OptionFormData } from "./types";
 
 export async function fetchUserBalance(userString: string) {
@@ -18,6 +19,26 @@ export async function fetchUserBalance(userString: string) {
         
     } catch (error) {
         console.error('Error fetching balance in Navbar component:', error);
+    }
+}
+
+export async function fetchUserBetsAPI(username: string) {
+    try {
+        const response = await fetch(`/api/get-user-bets?username=${encodeURIComponent(username)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        if (!response.ok) throw new Error('Failed to fetch user bets and stuff');
+        const data = await response.json();
+        if(!data) {
+            return 0;
+        } else {
+            return data;
+        }
+    } catch (error) {
+        console.error('Error fetching the bets of the user: ', error)
     }
 }
 

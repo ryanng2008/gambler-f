@@ -140,7 +140,7 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                 {
                     success 
                     ?
-                    <div className='text-center mx-auto my-12'><p className=''>Success</p></div> 
+                    <div className='text-center mx-auto my-12'><p className=''>Success!</p></div> 
                     : 
                     <div className='px-8 py-6 flex flex-col gap-4'>
                         <div className='space-y-4'>
@@ -183,7 +183,15 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                         <div className='flex justify-between gap-4 mx-4'>
                             <Card title='Odds' bigContent={oddsRatio}/>
                             <Card title='Payout %' bigContent={(selectedSide === 'left' || selectedSide === 'right') ? `${payoutPercent}%` : 'N/A'}/>
-                            <Card title='Win Profit' bigContent={`$${Math.round(betAmount * truePayoutRate * 100) / 100}`}/>
+                            {/* <Card title='Win Profit' bigContent={`$${Math.round(betAmount * truePayoutRate * 100) / 100}`}/> */}
+                            <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
+                                <h2 className='font-semibold text-sm'>Win Profit</h2>
+                                <div className='flex gap-[2px] justify-center'>
+                                    <h2 className='text-lg mb-1 self-end'>$</h2>
+                                    <h1 className=' font-extralight text-4xl'>{Math.round(betAmount * truePayoutRate * 100) / 100}</h1>
+                                </div>
+                                
+                            </div>
                         </div>
                         </div>
                         <div className='SUBMIT BUTTON mx-4 text-right my-2'>

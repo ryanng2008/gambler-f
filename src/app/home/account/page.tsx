@@ -5,6 +5,7 @@ import Login from '@/app/ui/account/login'
 import Register from '@/app/ui/account/register';
 import AuthContext from '@/app/context/authContext';
 import Account from '@/app/ui/account/account';
+import { getRandomImage } from '@/app/lib/utils';
 
 
 
@@ -20,7 +21,8 @@ export default function Page() {
             setPage('logout');
         }
     }, [user])
-    
+    const imageUrl = getRandomImage();
+    console.log(imageUrl)
 
     return (
         <>
@@ -35,11 +37,9 @@ export default function Page() {
                 : <div>Loading...</div>
             }
             <div className='flex justify-center items-center h-[75vh]'>
-                <Image 
-                className='rounded-lg h-auto'
-                src='/asap.jpeg'
-                width={380}
-                height={140}
+                <img 
+                className='rounded-lg h-[95%] w-auto'
+                src={imageUrl}
                 alt=''
                 />
             </div>

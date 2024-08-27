@@ -18,3 +18,17 @@ import Navbar from '../src/app/ui/home/navbar'
 //        <Navbar balance={userObject.balance || 0}/>
 //    )
 //}
+
+
+    //useEffect(() => {
+    //    async () => {
+    //        console.log('ran again')
+    //        try {
+    //            const fetchedUserObject = await fetchUser(user);
+    //            setUserObject(fetchedUserObject);
+    //        } catch (error) {
+    //            console.error('Error fetching user in the useEffect: ', error)
+    //        }
+    //        
+    //    }
+    //}, [user])

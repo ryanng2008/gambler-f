@@ -114,7 +114,7 @@ export async function fetchMarkets() {
 export async function fetchMarketSubsections(marketCode: string) {
     try {
         const data = await sql`
-            SELECT subsections::text[] from markets
+            SELECT subsections from markets
             WHERE code = ${marketCode};
         `
         console.log('fetch market subsections COMPLETED')
@@ -125,6 +125,48 @@ export async function fetchMarketSubsections(marketCode: string) {
         throw new Error('Failed to fetch market subsections data.');
     }
 }
+
+export async function fetchUserBets(username: string) {
+    try {
+        const data = await sql`
+        SELECT * 
+        FROM bets
+        WHERE id::text = ANY (
+            SELECT unnest(bets) 
+            FROM users
+            WHERE username = ${username}
+        )
+        `
+        const verifiedBets = data.rows.filter((bet) => bet.bettoruser === username);
+        return verifiedBets;
+    } catch(error) {
+        console.error('Database Error: ', error)
+        throw new Error('Failed to fetch bets of a user')
+    }
+}
+
+export async function fetchUserBetsOptions(username: string) {
+    try {
+        const data = await sql`
+        SELECT *
+        from options
+        WHERE id::text = ANY (
+            SELECT optionid 
+            FROM bets
+            WHERE id::text = ANY (
+                SELECT unnest(bets) 
+                FROM users
+                WHERE username = ${username}
+            )
+        )
+        `
+        return data.rows;
+    } catch (error) {
+        console.error('Database Error: ', error)
+        throw new Error('Failed to fetch options of a user\'s bets')
+    }
+}
+
 export async function fetchMarket(code: string) {
     try {
         const data = await sql`
