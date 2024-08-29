@@ -1,14 +1,16 @@
 'use client';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { OptionFormData } from '@/app/lib/types';
 //import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation'
 import { handleSubmitOption } from '@/app/lib/api';
+import AuthContext from '@/app/context/authContext';
 
 // type OptionFormSubmitHandler = (form: OptionFormData) => void;
 
 export default function OptionFormClient() {
+    const { user } = useContext(AuthContext);
     const router = useRouter();
     // { onSubmit }: { onSubmit: any }
     //const router = useRouter();
@@ -79,8 +81,9 @@ export default function OptionFormClient() {
     }
 
     const onSubmit = async (form: OptionFormData) => {
-        await handleSubmitOption(form);
+        await handleSubmitOption(form, user);
     }
+
     return (
             <div className="FORM CONTENT md:grid flex flex-col grid-cols-2 gap-8">
                 <div className="flex flex-col gap-6">
@@ -162,17 +165,20 @@ export default function OptionFormClient() {
                         </div>
                     </div>
                     <div className='justify-end flex'>
-                        <button onClick={() => {
-                            //"use server";
-                            //if(Number(form.minbet) > Number(form.maxbet)) {
-                            //    setForm(prevForm => ({...form, minbet: prevForm.maxbet, maxbet: prevForm.minbet}))
-                            //    console.log('inside button Activated')
-                            //}
-                            onSubmit(form);
-                            router.push('/home')
-                        }} className='bg-gray-800 text-white font-medium py-2 px-4 rounded-lg'>
-                            Create bet
-                        </button>
+                        {
+                            (user != null) &&
+                            <button onClick={() => {
+                                //"use server";
+                                //if(Number(form.minbet) > Number(form.maxbet)) {
+                                //    setForm(prevForm => ({...form, minbet: prevForm.maxbet, maxbet: prevForm.minbet}))
+                                //    console.log('inside button Activated')
+                                //}
+                                onSubmit(form);
+                                router.push('/home')
+                            }} className='bg-gray-800 text-white font-medium py-2 px-4 rounded-lg'>
+                                Create bet
+                            </button>
+                        }
                     </div>
                 </div>
             </div>

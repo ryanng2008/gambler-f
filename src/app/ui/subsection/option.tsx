@@ -146,14 +146,14 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                         <div className='space-y-4'>
                         <h1 className='font-semibold text-lg'>Pick a side</h1>
                         <div className='BAR CONTAINER bg-blue-300 rounded-lg p-4 flex flex-row justify-between items-center gap-4'>
-                            <h2>Under</h2>
+                            <h2>Over</h2>
                             <div className='BAR min-h-[64px] bg-red-400 w-full rounded-lg flex flex-row'>
                                 <button 
                                 className={`LEFT SIDE bg-white w-[50%] items-center flex justify-end rounded-l-lg border-green-300 ${selectedSide === 'left' && 'border-[3px]'}`}
                                 onClick={() => handleSelectSide('left')}>
                                     <div className='flex flex-col mx-3 text-right'>
                                         <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && optionItem.odds}%`}</p>
-                                        <p className='text-sm inline'>33</p>
+                                        {/* <p className='text-sm inline'>33</p> */}
                                     </div>
                                 </button>
                                 <button 
@@ -162,11 +162,11 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                                 >
                                     <div className='flex flex-col mx-3 text-left'>
                                         <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && (100 - optionItem.odds)}%`}</p>
-                                        <p className='text-sm  inline'>45</p>
+                                        {/* <p className='text-sm  inline'>45</p> */}
                                     </div>
                                 </button>
                             </div>
-                            <h2>Over</h2>
+                            <h2>Under</h2>
                         </div>
                         </div>
                         <div className='space-y-4 flex flex-col'>

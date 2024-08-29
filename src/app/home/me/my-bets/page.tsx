@@ -7,8 +7,8 @@ import { fetchUserBetsAPI } from "@/app/lib/api";
 
 export default function Page() {
     const { user, setUser } = useContext(AuthContext);
-    const [betObjects, setBetObjects] = useState<any>([]);
-    const [bettedOptions, setBettedOptions] = useState<any>([]);
+    const [betObjects, setBetObjects] = useState<any[]>([]);
+    const [bettedOptions, setBettedOptions] = useState<any[]>([]);
     // const getUserBetData = async () => {
     //     const data = await fetchUserBetsAPI(user);
     //     setBetObjects(data.bets)

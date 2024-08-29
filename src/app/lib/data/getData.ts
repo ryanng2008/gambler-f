@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 
 export async function fetchOptions() {
     try {
-        const data = await sql`SELECT * FROM options`;
+        const data = await sql`SELECT * FROM options WHERE closed = false`;
         console.log('fetch all options completed')
         return data.rows;
     } catch (error) {
@@ -64,14 +64,14 @@ export async function fetchUserId(id: string) { // fetch one user row from its i
 }
 
 export async function fetchUser(username: string) {
-    console.log('we touched this')
+    //console.log('we touched this')
     try {
         const data = await sql`
             SELECT * FROM users
             WHERE username = ${username}
         `
-        console.log(`fetching user ${username} completed`)
-        console.log(data.rows[0])
+        //console.log(`fetching user ${username} completed`)
+        //console.log(data.rows[0])
         return data.rows[0];
     } catch (error) {
         console.error('Database Error: ', error)
@@ -135,7 +135,8 @@ export async function fetchUserBets(username: string) {
             SELECT unnest(bets) 
             FROM users
             WHERE username = ${username}
-        )
+            )
+        AND active = true
         `
         const verifiedBets = data.rows.filter((bet) => bet.bettoruser === username);
         return verifiedBets;
@@ -158,12 +159,27 @@ export async function fetchUserBetsOptions(username: string) {
                 FROM users
                 WHERE username = ${username}
             )
+            AND active = true
         )
         `
         return data.rows;
     } catch (error) {
         console.error('Database Error: ', error)
         throw new Error('Failed to fetch options of a user\'s bets')
+    }
+}
+
+export async function fetchUserOptions(username: string) {
+    try {
+        const data = await sql`
+        SELECT * FROM options
+        WHERE creator = ${username}
+        AND closed = false;
+        `
+        return data.rows
+    } catch(error) {
+        console.error('Database Error:', error)
+        throw new Error('Failed to fetch user\'s options')
     }
 }
 

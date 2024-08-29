@@ -42,6 +42,47 @@ export async function fetchUserBetsAPI(username: string) {
     }
 }
 
+export async function fetchUserOptionsAPI(username: string) {
+    try {
+        const response = await fetch(`/api/get-user-options?username=${encodeURIComponent(username)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },        
+        })
+        if (!response.ok) throw new Error('Failed to fetch user options');
+        const data = await response.json();
+        if(data.options) {
+            return data.options
+        } else {
+            return []
+        }
+    } catch (error) {
+        console.error('Error fetching users options: ', error)
+    }
+}
+
+export async function handleResolveOption(username: string, optionid: string, outcome: 'o' | 'u' | 'h' | 'm') {
+    const secretkey = 'nigga'
+    try {
+        const response = await fetch(`/api/resolve-bet`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username, optionid, outcome, secretkey})
+        })
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`Resolution failed: ${data}`);
+        }
+        return { success: true, message: 'Resolution successful' }
+    } catch (error) {
+        console.error('Error in resolve option handler: ', error)
+        return { success: false, message: error }
+    }
+}
+
 export async function handleLogin(username: string, password: string) { // do this when u implement password
     //const { username, password } = await request.json();
 
@@ -115,14 +156,14 @@ export async function handleRegister(username: string, password: string) {
 
 
 // DO ERROR HANDLING FOR THIS
-export async function handleSubmitOption(form: OptionFormData) {
+export async function handleSubmitOption(form: OptionFormData, username: string) {
     const fixedForm = (Number(form.minbet) > Number(form.maxbet)) ? {...form, minbet: form.maxbet, maxbet: form.minbet} : form;
     await fetch('/api/submit-option', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(fixedForm)
+        body: JSON.stringify({...fixedForm, user: username})
     })
     .then(response => response.json())
     .then(data => console.log(data))

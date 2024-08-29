@@ -22,7 +22,7 @@ export default function Page() {
         }
     }, [user])
     const imageUrl = getRandomImage();
-    console.log(imageUrl)
+    //console.log(imageUrl)
 
     return (
         <>

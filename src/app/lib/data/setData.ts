@@ -61,11 +61,13 @@ export async function postBet(bettorUser: string, optionId: string, betAmount: n
     }
 }
 
-export async function addBetToUser(username: string, betId: string) {
+export async function addBetToUser(username: string, betId: string, betAmount: number) {
     try {
         const addedBet = await sql`
             UPDATE users
-            SET bets = array_append(bets, ${betId})
+            SET bets = array_append(bets, ${betId}),
+                balance = COALESCE(balance, 0) - ${betAmount},
+                escrow = COALESCE(escrow, 0) + ${betAmount}
             WHERE username = ${username};
         `
         console.log(`Added bet ${betId} to user ${username}.`)

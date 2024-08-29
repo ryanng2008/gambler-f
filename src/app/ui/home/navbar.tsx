@@ -26,9 +26,9 @@ export default function Navbar() {
         }
     }
     useEffect(() => {
-        console.log('SELLING THAT RERUN')
+        console.log('RERUN FETCH BALANCE')
         fetchBalance(user);
-    }, [user])
+    })
 
 
     return (
@@ -52,7 +52,7 @@ export default function Navbar() {
                     }
                 </div>
                 </div>
-                <div className='BUTTONS flex flex-row md:gap-12 gap-4 justify-center drop-shadow-lg'>
+                <div className='BUTTONS flex flex-row md:gap-12 gap-4 justify-center drop-shadow-lg md:visible '>
                     {links.map((link) => {
                     return(<Link 
                     key={link.name}
@@ -80,7 +80,7 @@ export default function Navbar() {
                             <div>
                                 <button className='flex' onClick={() => setOpen(!open)}>
                                 <Image 
-                                src="/menu.svg"
+                                src="/svg/menu.svg"
                                 alt="Menu Button"
                                 className='drop-shadow-lg'
                                 width={64}

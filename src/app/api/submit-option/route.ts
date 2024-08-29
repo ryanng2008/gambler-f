@@ -6,8 +6,8 @@ export async function POST(request: any) {
     try {
         const form = await request.json();
         const insertedOption = await sql`
-            INSERT INTO options (heading, subheading, optiontype, bettingline, imagelink, odds, minbet, maxbet) VALUES
-                (${form.heading}, ${form.subheading}, ${form.optiontype}, ${form.bettingline}, ${form.imagelink}, ${form.odds}, ${form.minbet}, ${form.maxbet});
+            INSERT INTO options (heading, subheading, optiontype, bettingline, imagelink, odds, minbet, maxbet, creator) VALUES
+                (${form.heading}, ${form.subheading}, ${form.optiontype}, ${form.bettingline}, ${form.imagelink}, ${form.odds}, ${form.minbet}, ${form.maxbet}, ${form.user});
         `
         console.log('Finished posting option')
         return new Response(JSON.stringify(insertedOption), { status: 201 });

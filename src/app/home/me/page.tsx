@@ -20,11 +20,11 @@ export default function Page() {
                 </Link>
             </div>
             <div className='flex justify-center items-center h-[75vh]'>
-                    <img 
-                    className='rounded-lg h-[95%] w-auto'
-                    src={imageUrl}
-                    alt=''
-                    />
+                <img 
+                className='rounded-lg h-[95%] w-auto'
+                src={imageUrl}
+                alt=''
+                />
             </div>
         </div>
         </div>
