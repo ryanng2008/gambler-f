@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { sql } from '@vercel/postgres';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const newpassword = searchParams.get('newpassword');
     const secretkey = searchParams.get('secretkey');
     if(secretkey !== 'nigga') {
-        return { success: false, message: 'Invalid credentials'}
+        return NextResponse.json({ success: false, message: 'Invalid credentials'})
     }
     const hashedPassword = await bcrypt.hash(newpassword!, 10)
     try {
@@ -17,8 +17,11 @@ export async function GET(request: NextRequest) {
             SET password = ${newpassword}
             WHERE username = ${username}
         `
-        return { success: true, message: newpassword}
+        return NextResponse.json({ success: true, message: newpassword})
+        //return new Response(JSON.stringify(`Success `), { status: 201 })
     } catch(error) {
-        return { success: false, message: error}
+        //return new Response(JSON.stringify(`Failed `), { status: 500 })
+
+        return NextResponse.json({ success: false, message: error})
     }
 } 
