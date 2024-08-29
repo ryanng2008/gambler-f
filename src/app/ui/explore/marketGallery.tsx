@@ -11,7 +11,7 @@ export default async function MarketGallery() {
     const markets = await fetchMarkets();
     //console.log(markets)
     return (
-        <div className='GALLERY mx-4 grid grid-cols-3 gap-6 my-2'>
+        <div className='GALLERY mx-4 md:grid lg:grid-cols-3 md:grid-cols-2 flex flex-col gap-6 my-2'>
         {markets.map((market) => {
           return (
             <Link key={market.code} href={`/home/explore/${market.code}`} className='bg-gradient-to-br from-gray-100 to-gray-300 ONE BOX  py-6 justify-center px-6 outline outline-2 outline-graydark drop-shadow-lg rounded-md flex flex-wrap flex-col gap-2'>

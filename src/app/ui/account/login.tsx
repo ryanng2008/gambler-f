@@ -44,14 +44,14 @@ export default function Login({ switchPage }: { switchPage: (pageName: string) =
                             <input 
                             type="text" 
                             placeholder='Username'
-                            className='py-1 px-2 rounded-lg inline text-lg max-w-[300px]'
+                            className='py-1 px-2 rounded-lg inline text-lg md:max-w-[300px]'
                             value={form.username} 
                             onChange={e => setForm({...form, username: e.target.value})} 
                             />
                             <input 
                             type="text" 
                             placeholder='Password'
-                            className='py-1 px-2 rounded-lg inline text-lg max-w-[300px]'
+                            className='py-1 px-2 rounded-lg inline text-lg md:max-w-[300px]'
                             value={form.password} 
                             onChange={e => setForm({...form, password: e.target.value})} 
                             />

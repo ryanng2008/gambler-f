@@ -180,8 +180,8 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                             step={1}
                             />
                         </div>
-                        <div className='flex justify-between gap-4 mx-4'>
-                            <Card title='Odds' bigContent={oddsRatio}/>
+                        <div className='flex justify-center gap-4 mx-4'>
+                            <div className='sm:block hidden'><Card title='Odds' bigContent={oddsRatio}/></div>
                             <Card title='Payout %' bigContent={(selectedSide === 'left' || selectedSide === 'right') ? `${payoutPercent}%` : 'N/A'}/>
                             {/* <Card title='Win Profit' bigContent={`$${Math.round(betAmount * truePayoutRate * 100) / 100}`}/> */}
                             <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
@@ -190,7 +190,6 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                                     <h2 className='text-lg mb-1 self-end'>$</h2>
                                     <h1 className=' font-extralight text-4xl'>{Math.round(betAmount * truePayoutRate * 100) / 100}</h1>
                                 </div>
-                                
                             </div>
                         </div>
                         </div>

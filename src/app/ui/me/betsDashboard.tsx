@@ -29,7 +29,7 @@ export default function BetsDashboard({ loggedIn, bets, options }: { loggedIn: b
             (bets.length < 1)
             ? <div className="text-center"><p>Loading or nothing to see here. Try placing a bet first!</p></div>
             : loggedIn 
-            ? <div className="grid grid-cols-2 gap-4">{betItems}</div>
+            ? <div className="lg:grid grid-cols-2 flex flex-col gap-4">{betItems}</div>
             : <div className="text-center"><p>Nothing to see here. Try logging in!</p></div>
         }
         </>

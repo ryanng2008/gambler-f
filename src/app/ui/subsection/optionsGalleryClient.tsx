@@ -67,7 +67,7 @@ export default function OptionsGalleryClient({ optionsData } : { optionsData: an
     })
     // u might have to pass to Option using context!
     return (
-        <div className='OPTIONS GALLERY grid grid-cols-1 md:grid-cols-2 items-start gap-6 mx-6'>
+        <div className='OPTIONS GALLERY lg:grid grid-cols-2 flex flex-col gap-6 mx-6'>
             {/* {optionsItems} */}
             <div className='LEFT flex flex-col gap-6'>
                 {leftOptionsItems}

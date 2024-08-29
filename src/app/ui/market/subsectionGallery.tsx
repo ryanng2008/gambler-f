@@ -34,7 +34,7 @@ export default async function SubsectionGallery({ marketCode }: { marketCode: st
             <div>
                 <h1 className='text-4xl font-semibold'>{marketObject.name}</h1> 
             </div>
-            <div className='grid grid-cols-2 gap-6'>
+            <div className='lg:grid grid-cols-2 flex flex-col gap-6'>
                 {subItems}
             </div>
         </div>

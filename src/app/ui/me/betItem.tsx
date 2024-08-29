@@ -21,11 +21,10 @@ export default function BetItem({ side, bettingline, wager, heading, subheading,
                 </div>
                 <div className="grid grid-rows-2">
                     <div></div>
-                    <div className="bg-gray-200 rounded-md px-4 py-1 flex gap-8 drop-shadow-sm ">
+                    <div className="bg-gray-200 rounded-md px-4 py-1 flex gap-8 drop-shadow-sm items-center">
                         <h1 className="font-medium text-lg">Payout</h1>
                         <div className='flex gap-[2px] justify-center'>
-                            <h2 className='text-sm mb-[3px] self-end'>$</h2>
-                            <h1 className=' font-normal text-lg'>{payoutNum}</h1>
+                            <h1 className=' font-normal text-lg'>${payoutNum}</h1>
                         </div>
                     </div>
                     {/* <div className="bg-gray-200 rounded-md px-4 py-1 flex gap-8 justify-between items-center drop-shadow-sm">

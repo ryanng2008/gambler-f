@@ -85,10 +85,10 @@ export default function OptionFormClient() {
     }
 
     return (
-            <div className="FORM CONTENT md:grid flex flex-col grid-cols-2 gap-8">
+            <div className="FORM CONTENT lg:grid flex flex-col grid-cols-2 gap-8">
                 <div className="flex flex-col gap-6">
                     <h2 className="text-xl font-semibold">Categorisation</h2>
-                    <div className="CATEGORY DETAILS FORMS grid grid-cols-2 gap-y-12"> 
+                    <div className="CATEGORY DETAILS FORMS sm:grid grid-cols-2 flex flex-col gap-y-12"> 
                         <div className="flex flex-col gap-3 mr-8">
                             <h2 className="text-md font-normal">Category</h2>
                             <input name='marketCode' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100" type="text" placeholder='Dropdown pick an option' value={form.marketCode} onInput={() => {}}/> 
@@ -100,7 +100,7 @@ export default function OptionFormClient() {
                     </div>
                     <h2 className="text-xl font-semibold">Customise</h2>
                     <div className="CUSTOMISE FORMS gap-4 flex flex-col mr-4">
-                        <div className="flex flex-row">
+                        <div className="flex sm:flex-row flex-col sm:gap-0 gap-4">
                             <div className="flex flex-col gap-2 mr-8">
                                 <h2 className="text-md font-normal">Heading</h2>
                                 <input name='heading' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100 md:max-w-[100]" maxLength={15} type="text" placeholder='J. Johnson' value={form.heading} onInput={handleChange}/>
@@ -120,7 +120,7 @@ export default function OptionFormClient() {
                 <div className="BET TYPE SPECIFIC CONTENT space-y-6 mr-12">
                     <AbstractOption heading={form.heading} bettingLine={form.bettingline!.toString()} subheading={form.subheading}/>
                     <h2 className="text-xl font-semibold">Details</h2>
-                    <div className="OPTION DETAILS FORMS grid grid-cols-2 gap-8"> 
+                    <div className="OPTION DETAILS FORMS sm:grid grid-cols-2 flex flex-col gap-8"> 
                         {/* Fields for Hit/Miss & Over/Under */}
                         <div className="space-y-2 flex flex-col">
                             {/* TODO: Make this conditional for Over/Under */}

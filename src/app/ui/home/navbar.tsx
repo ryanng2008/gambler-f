@@ -32,38 +32,37 @@ export default function Navbar() {
 
 
     return (
-        <div className="navbar grid grid-cols-3 justify-center items-center justiFFy-between bg-[#98A869] rounded-3xl text-white my-6 px-[5%] py-2 drop-shadow-xl">
+        <div className="navbar md:grid flex grid-cols-3 md:justify-center items-center justify-between bg-[#98A869] rounded-3xl text-white my-6 px-[5%] py-2 drop-shadow-xl">
                 <div className='flex gap-4'>
                 <Link href="/home">
                     <Image 
                     src="/lebron.png" 
                     alt='Lebron'
-                    className='sm:block hidden justify-start'
+                    className='block justify-start'
                     width={64} 
                     height={64} />
                 </Link>
-                <div className='my-auto flex flex-row gap-1 md:px-12 px-2'>
+                <div className='my-auto md:flex hidden flex-row gap-1 lg:px-12 md:px-4 px-2 overflow-hidden'>
                     {user 
                     ? (<>
-                    <p>Logged in as</p>
-                    <p className='font-semibold'>{user}</p>
+                    <p>Logged in as <strong>{user}</strong></p>
                     </>
                     ) : <p>Not logged in</p>
                     }
                 </div>
                 </div>
-                <div className='BUTTONS flex flex-row md:gap-12 gap-4 justify-center drop-shadow-lg md:visible '>
+                <div className='BUTTONS md:flex flex-row lg:gap-12 gap-4 justify-center drop-shadow-lg hidden'>
                     {links.map((link) => {
                     return(<Link 
                     key={link.name}
                     href={link.href}
-                    className='bg-greenfaded hover:bg-greendark hover:text-greenfaded duration-300 border-[0.0625rem] border-greendark text-greendark font-semibold rounded-2xl py-2 md:px-12 sm:px-8 px-4'>
+                    className='bg-greenfaded hover:bg-greendark hover:text-greenfaded duration-300 border-[0.0625rem] border-greendark text-greendark font-semibold rounded-2xl py-2 lg:px-12 md:px-8 px-4'>
                     <p>{link.name}</p>
                     </Link>)
                     })}
                 </div>
                 <div className='OTHER ITEMS flex flex-row gap-12 justify-end'>
-                    {user != null && <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden md:block'>
+                    {user != null && <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden lg:block'>
                         <p>{`$${balance.toLocaleString()}`}</p>
                     </div>}
                     {/* <Link href='/home/account/'>
@@ -90,8 +89,11 @@ export default function Navbar() {
                             </div>
                             <div className={`absolute w-[64px] ${open ? '' : 'hidden'} duration-500`}> {/*origin-top-right flex justify-end bg-gray-300 p-4 */}
                                 <div className='ml-[-64px] bg-greenfaded bgX-gray-200 text-black border border-greendark rounded-md flex flex-col'>
-                                    <Link onClick={() => setOpen(false)} href='/home/me' className=' hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3'>Dashboard</Link>
-                                    <Link onClick={() => setOpen(false)} href='/home/account' className=' hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3'>Account</Link>
+                                    <Link onClick={() => setOpen(false)} href='/home/account' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3 md:hidden block'>Browse</Link>
+                                    <Link onClick={() => setOpen(false)} href='/home/account' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3 md:hidden block'>Create</Link>
+                                    <Link onClick={() => setOpen(false)} href='/home/me' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3'>Dashboard</Link>
+                                    <Link onClick={() => setOpen(false)} href='/home/account' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3'>Account</Link>
+                                    
                                 </div>
                             </div>
                           </div>

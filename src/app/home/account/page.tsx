@@ -26,7 +26,7 @@ export default function Page() {
 
     return (
         <>
-        <div className='grid grid-cols-2 items-center'>
+        <div className='flex md:grid grid-cols-2 items-center'>
             {
                   (page === 'login')
                 ? <Login switchPage={handleSwitchPage}/>
@@ -36,7 +36,7 @@ export default function Page() {
                 ? <Account />
                 : <div>Loading...</div>
             }
-            <div className='flex justify-center items-center h-[75vh]'>
+            <div className='md:flex justify-center items-center h-[75vh] hidden md:visible'>
                 <img 
                 className='rounded-lg h-[95%] w-auto'
                 src={imageUrl}

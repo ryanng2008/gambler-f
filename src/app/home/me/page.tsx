@@ -5,7 +5,7 @@ export default function Page() {
     const imageUrl = getRandomImage();
     return (
         <div className='CONTAINER flex flex-col gap-8'>
-        <div className="BODY grid grid-cols-2 ">
+        <div className="BODY lg:grid grid-cols-2 flex flex-col">
             <div className="flex flex-col">
                 <h1 className='text-5xl font-semibold my-8'>My Stuff</h1>
                 <Link href='/home/me/my-bets'>
@@ -19,7 +19,7 @@ export default function Page() {
                     </div>
                 </Link>
             </div>
-            <div className='flex justify-center items-center h-[75vh]'>
+            <div className='md:flex hidden justify-center items-center h-[75vh]'>
                 <img 
                 className='rounded-lg h-[95%] w-auto'
                 src={imageUrl}
