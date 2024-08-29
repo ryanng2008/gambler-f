@@ -89,8 +89,8 @@ export default function Navbar() {
                             </div>
                             <div className={`absolute w-[64px] ${open ? '' : 'hidden'} duration-500`}> {/*origin-top-right flex justify-end bg-gray-300 p-4 */}
                                 <div className='ml-[-64px] bg-greenfaded bgX-gray-200 text-black border border-greendark rounded-md flex flex-col'>
-                                    <Link onClick={() => setOpen(false)} href='/home/account' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3 md:hidden block'>Browse</Link>
-                                    <Link onClick={() => setOpen(false)} href='/home/account' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3 md:hidden block'>Create</Link>
+                                    <Link onClick={() => setOpen(false)} href='/home/explore' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3 md:hidden block'>Browse</Link>
+                                    <Link onClick={() => setOpen(false)} href='/home/create' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3 md:hidden block'>Create</Link>
                                     <Link onClick={() => setOpen(false)} href='/home/me' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3'>Dashboard</Link>
                                     <Link onClick={() => setOpen(false)} href='/home/account' className='hover:bg-greendark hover:text-greenfaded text-greendark font-semibold px-4 py-3'>Account</Link>
                                     
