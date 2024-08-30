@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { sql } from '@vercel/postgres';
 import bcrypt from 'bcrypt';
-import { NextRequest, NextResponse } from 'next/server';
+import { getUTCDateTime } from '@/app/lib/utils';
+//import { NextRequest, NextResponse } from 'next/server';
 
 const secret = 'cardboard_academy_f1';
 
@@ -30,6 +31,8 @@ const generateToken = (user: any) => {
 //    }
 //}
 
+
+
 export async function POST(request: any) {
     const { username, password } = await request.json();
     const userQuery = await sql`
@@ -39,6 +42,16 @@ export async function POST(request: any) {
     ` 
     const userData = userQuery.rows[0]; // | userQuery.rows depending on what data looks like.
     if (userData && (await bcrypt.compare(password, userData.password))) {
+        const currentTime = getUTCDateTime();
+        try  {
+            const loginUpdate = await sql`
+            UPDATE users
+            SET lastlogin = ${currentTime}
+            WHERE username = ${username}
+            `
+        } catch (error) {
+            return new Response(JSON.stringify('Login success - but failed to update last login'), { status: 200 })
+        }
         //const token = generateToken(userData)
         return new Response(JSON.stringify('Login success'), { status: 200 }); //JSON.stringify(token)
     } else {

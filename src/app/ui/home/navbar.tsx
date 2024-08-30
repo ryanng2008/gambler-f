@@ -4,7 +4,7 @@ import Link from 'next/link';
 import AuthContext from '@/app/context/authContext';
 import { useContext, useEffect, useState } from 'react'
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { UserCircleIcon as OutlineUser } from '@heroicons/react/24/outline';
+//import { UserCircleIcon as OutlineUser } from '@heroicons/react/24/outline';
 import { fetchUserBalance } from '@/app/lib/api';
 
 export default function Navbar() {

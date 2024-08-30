@@ -194,10 +194,11 @@ export default function Option({ open, onOpen, optionItem }: { open: boolean, on
                         </div>
                         </div>
                         <div className='SUBMIT BUTTON mx-4 text-right my-2'>
-                        <button 
+                        {(user !== null) && <button 
                             className='bg-gray-600 text-white py-2 px-4 font-medium rounded-lg'
                             onClick={onSubmit}
-                            ><p>Place bet</p></button>
+                            ><p>Place bet</p>
+                        </button>}
                         </div>
                     </div>
                 }
