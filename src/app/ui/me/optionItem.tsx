@@ -82,8 +82,8 @@ export default function OptionItem({ id, heading='No Heading', subheading='', be
             <div className="flex justify-end">
                 <button onClick={() => setOpen(!open)}>
                     {open ?
-                    <Image src='/svg/retract.svg' alt='Retract' width={24} height={4}></Image> :
-                    <Image src='/svg/expand.svg' alt='Expand' width={24} height={4}></Image>}
+                    <Image src='/svg/retract.svg' alt='Retract' width={24} height={24}></Image> :
+                    <Image src='/svg/expand.svg' alt='Expand' width={24} height={24}></Image>}
                 </button>
                 
             </div>
