@@ -14,9 +14,9 @@ export default async function SubsectionGallery({ marketCode }: { marketCode: st
     const subItems = subsectionObjects.map((subsectionObject) => { // maybe u can move the fetches into here.
         return (
             <Link key={subsectionObject.code} href={`/home/explore/${marketCode}/${subsectionObject.code}`} className='ONE ITEM bg-gray-300 drop-shadow-xl grid grid-cols-5 rounded-lg overflow-clip items-center'>
-                    <div className='col-span-3 flex flex-col gap-2 py-6 pl-6'>
-                        <h1 className='text-2xl font-semibold'>{subsectionObject?.name}</h1>
-                        <div className='flex flex-row gap-4'>
+                    <div className='col-span-3 flex flex-col gap-2 py-6 pl-6 mr-4'>
+                        <h1 className='sm:text-2xl text-lg font-semibold'>{subsectionObject?.name}</h1>
+                        <div className='sm:flex flex-row hidden gap-4'>
                             <p>{subsectionObject?.date || 'No Date'}</p>
                             <div className='w-px bg-[#000000]' />
                             <p>{subsectionObject?.time || 'No Time'} (+8)</p>
