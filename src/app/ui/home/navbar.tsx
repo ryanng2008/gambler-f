@@ -20,7 +20,7 @@ export default function Navbar() {
     async function fetchBalance(userString: string) {
         try {
             const balanceData = await fetchUserBalance(userString);
-            setBalance(balanceData);
+            setBalance(balanceData || 0);
         } catch (error) {
             console.error(error)
         }
