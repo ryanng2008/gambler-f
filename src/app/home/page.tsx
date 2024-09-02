@@ -12,7 +12,7 @@ function Page() {
             {(user === null) && <Link href='/home/account' className="hover:underline hover:text-gray-600 mx-2 text-2xl">Register or login here (or press the top right button)</Link>}
             {(user !== null) &&
             <>
-            <p className="text-2xl mx-2 my-2">Explore bets at the Explore tab, create bet options at the Create tab</p> 
+            <p className="text-2xl mx-2 my-2">Explore bets at the Browse tab, create bet options at the Create tab</p> 
             <p className="text-2xl mx-2 my-2">View your bets and options in the Dashboard (inside the menu burger)</p>
             </>
             }

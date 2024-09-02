@@ -41,7 +41,7 @@ export async function resolveOptions(username: string, optionid: string, outcome
                         UPDATE users
                         SET balance = balance + CASE WHEN escrow < 0 THEN escrow ELSE 0 END,
                             escrow = CASE WHEN escrow < 0 THEN 0 ELSE escrow END
-                        WHERE ussername = ${bet.bettoruser}
+                        WHERE username = ${bet.bettoruser}
                     `
                     // prolly dont need handling
                 } else {

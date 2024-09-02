@@ -55,6 +55,6 @@ export async function POST(request: any) {
         //const token = generateToken(userData)
         return new Response(JSON.stringify('Login success'), { status: 200 }); //JSON.stringify(token)
     } else {
-        return new Response(JSON.stringify('Invalid Credentials'), { status: 401 });
+        return new Response(JSON.stringify('Login failed: invalid login credentials'), { status: 401 });
     }
 }
