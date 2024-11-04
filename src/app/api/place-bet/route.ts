@@ -6,6 +6,9 @@ export async function POST(request: any) {
         const { bettorUser, optionId, betAmount, payoutRate, side } = await request.json();
         // bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',
         const data = await postBet(bettorUser, optionId, betAmount, payoutRate, side);
+        if(data === 0) {
+            return new Response('No Money', { status: 409 })
+        }
         if(data && data.length > 0) {
             const betId = data[0].id;
             try {
@@ -16,7 +19,7 @@ export async function POST(request: any) {
             }
 
         } else {
-            return new Response(JSON.stringify('Data does not exist'), { status: 401 });
+            return new Response(JSON.stringify('It failed for some reason'), { status: 401 });
         }
     } catch (error) {
         console.error(error)

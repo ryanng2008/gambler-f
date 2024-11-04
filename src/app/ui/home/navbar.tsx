@@ -20,7 +20,7 @@ export default function Navbar() {
     async function fetchBalance(userString: string) {
         try {
             const balanceData = await fetchUserBalance(userString);
-            setBalance(balanceData || 0);
+            setBalance(balanceData || null);
         } catch (error) {
             console.error(error)
         }
@@ -63,7 +63,7 @@ export default function Navbar() {
                 </div>
                 <div className='OTHER ITEMS flex flex-row gap-12 justify-end'>
                     {user != null && <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden lg:block'>
-                        <p>{`$${balance.toLocaleString()}`}</p>
+                        <p>{`$${(balance || 0).toLocaleString()}`}</p>
                     </div>}
                     {/* <Link href='/home/account/'>
                     {

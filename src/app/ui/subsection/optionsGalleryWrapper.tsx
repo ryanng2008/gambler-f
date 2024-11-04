@@ -7,7 +7,7 @@ import { QueryResultRow } from '@vercel/postgres';
 
 export default async function OptionsGalleryWrapper({ subsectionCode }: { subsectionCode: string}) {
     noStore();
-    const subsection = await fetchSubsection(subsectionCode);
+    //const subsection = await fetchSubsection(subsectionCode);
     //const subsectionOptionIds = subsection?.options;
     //console.log(subsectionOptionIds)
     //console.log('SUBSECTION OPTION IDs')

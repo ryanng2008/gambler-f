@@ -29,31 +29,48 @@ export default function OptionFormClient() {
     const overPayoutRate = (100 - form.odds) / form.odds;
 
     function handleChange(e: any) {
-        setForm(f => ({
+        if(e.target.name === 'max') {
+            setForm({
+                ...form,
+                [e.target.name]: Math.min(e.target.value, 999999999)
+            })
+        } else if(e.target.name === 'min') {
+            setForm({
+                ...form,
+                [e.target.name]: Math.max(e.target.value, 0)
+            })
+        }
+        setForm({
             ...form,
             [e.target.name]: e.target.value
-        }))
+        })
     }
     function handleChangeOdds(e: any) {
         if(e.target.name === "over") {
-            setForm(f => ({
+            setForm({
                 ...form,
                 odds: e.target.value
-            }))
+            })
         } else if(e.target.name === "under") {
             const underValue = 100 - e.target.value;
-            setForm(f => ({
+            setForm({
                 ...form,
                 odds: underValue
-            }))
+            })
         } else {
             console.log('done')
         }
     }
+    function handleChooseType(e: any) {
+        setForm({
+            ...form,
+            optiontype: e.target.name,
+        })
+    }
 
 
 
-    const AbstractOption = ({ heading, bettingLine, subheading }: {heading: string, bettingLine: string, subheading: string}) => {
+    const AbstractOption = ({ heading, bettingLine, subheading, type }: {heading: string, bettingLine: string, subheading: string, type: 'ou' | 'hm' | 'ptw'}) => {
         return (
         <div className='block'>
             <button className={` O/U H/M OPTION w-[100%] py-4 px-2 grid grid-cols-5 gap-2 drop-shadow-xl bg-gray-300 rounded-xl text-left`}>
@@ -70,7 +87,7 @@ export default function OptionFormClient() {
                         <h1 className='text-3xl font-semibold'>{heading}</h1>
                     </div>
                     <div className='flex flex-row flex-wrap gap-4 items-center'>
-                        { bettingLine && <div className='NUMBER font-semibold text-white bg-gray-700 px-3 py-1 rounded-lg'>
+                        { (type === 'ou') && <div className='NUMBER font-semibold text-white bg-gray-700 px-3 py-1 rounded-lg'>
                             <h1>{bettingLine}</h1>
                         </div>}
                         <p className='text-md'>{subheading}</p>
@@ -105,9 +122,15 @@ export default function OptionFormClient() {
                                 <h2 className="text-md font-normal">Heading</h2>
                                 <input name='heading' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100 md:max-w-[100]" maxLength={15} type="text" placeholder='J. Johnson' value={form.heading} onInput={handleChange}/>
                             </div>
-                            <div className="flex flex-col gap-3 mr-8">
+                            <div className="flex flex-col gap-2 mr-8">
                                 <h2 className="text-md font-normal">Type of option (dropdown)</h2>
-                                <input name='optiontype' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100" type="text" placeholder="Dropdown pick an option" value={form.optiontype} onInput={() => {}}/>
+                                <div className='flex flex-row gap-4'>
+                                    <button name='ou' onClick={handleChooseType} className={`py-1 px-2 outline outline-gray-700 rounded-md text-sm font-medium hover:scale-105 duration-300 ${(form.optiontype === 'ou') ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'}`}>Over/Under</button>
+                                    <button name='hm' onClick={handleChooseType} className={`py-1 px-2 outline outline-gray-700 rounded-md text-sm font-medium hover:scale-105 duration-300 ${(form.optiontype === 'hm') ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'}`}>Hit/Miss</button>
+                                    <button name='ptw' onClick={handleChooseType} className={`py-1 px-2 outline outline-gray-700 rounded-md text-sm font-medium hover:scale-105 duration-300 ${(form.optiontype === 'ptw') ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'}`}>Pick The Winner</button>
+
+                                </div>
+                                {/* <input name='optiontype' className="inline py-1 px-2 rounded-lg text-sm outline-gray-100" type="text" placeholder="Dropdown pick an option" value={form.optiontype} onInput={() => {}}/> */}
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 mr-8">
@@ -118,38 +141,42 @@ export default function OptionFormClient() {
                     
                 </div>
                 <div className="BET TYPE SPECIFIC CONTENT space-y-6 mr-12">
-                    <AbstractOption heading={form.heading} bettingLine={form.bettingline!.toString()} subheading={form.subheading}/>
+                    <AbstractOption heading={form.heading} bettingLine={form.bettingline!.toString()} subheading={form.subheading} type={form.optiontype}/>
                     <h2 className="text-xl font-semibold">Details</h2>
                     <div className="OPTION DETAILS FORMS sm:grid grid-cols-2 flex flex-col gap-8"> 
                         {/* Fields for Hit/Miss & Over/Under */}
                         <div className="space-y-2 flex flex-col">
                             {/* TODO: Make this conditional for Over/Under */}
-                            <h2 className="">Betting line</h2> 
-                            <input value={form.bettingline} onInput={handleChange} name='bettingline' className="py-1 px-2 rounded-lg text-sm outline-gray-100 " type="number" placeholder='12.5' />
                             <div className="grid grid-cols-2 justify-between gap-6">
                                 <div>
-                                    <h3 className="text-sm py-2">Minimum bet</h3>
-                                    <input name='minbet' className="py-1 px-2 rounded-lg text-sm outline-gray-100 max-w-[80%]" type="number" value={form.minbet} onInput={handleChange} placeholder='0'/>
+                                    <h3 className="text-md pb-1">Minimum bet</h3>
+                                    <input name='minbet' className="py-1 px-2 rounded-lg text-sm outline-gray-100 max-w-[80%]" type="number" value={form.minbet} onInput={handleChange} placeholder='0' min={0}/>
                                 </div>
                                 <div className="">
-                                    <h3 className="text-sm py-2">Maximum bet</h3>
+                                    <h3 className="text-md pb-1">Maximum bet</h3>
                                     <input name='maxbet' className="py-1 px-2 rounded-lg text-sm outline-gray-100 max-w-full" value={form.maxbet} onInput={handleChange} type="number" placeholder='100' max={999999999}/>
                                 </div>
                             </div>
+                            {form.optiontype === 'ou' &&
+                            (<>
+                                <h2 className="">Betting line</h2> 
+                                <input value={form.bettingline} onInput={handleChange} name='bettingline' className="py-1 px-2 rounded-lg text-sm outline-gray-100" type="number" placeholder='12.5' />
+                            </>)
+                            }
                         </div>
                         <div className="space-y-2">
                             <h2>Select odds</h2>
                             <div className="flex flex-col gap-4">
                                 <div className='justify-between flex'>
                                     <div className="space-y-1">
-                                        <h3>Over</h3>
+                                        <h3>{form.optiontype === 'ou' ? 'Over' : 'Hit'}</h3>
                                         <div className="flex flex-row">
                                             <input name='over' className="py-1 px-2 mr-1 rounded-lg text-sm outline-gray-100 inline" min={0} max={100} type="number" placeholder='100' value={form.odds} onInput={handleChangeOdds}/>
                                             <p>%</p>
                                         </div>
                                     </div>
                                     <div className="space-y-1">
-                                        <h3>Under</h3>
+                                        <h3>{form.optiontype === 'ou' ? 'Under' : 'Miss'}</h3>
                                         <div className="flex flex-row">
                                             <input name='under' className="py-1 px-2 mr-1 rounded-lg text-sm outline-gray-100 inline" min={0} max={100} type="number" value={100 - form.odds} onInput={handleChangeOdds} placeholder='100'/>
                                             <p>%</p>

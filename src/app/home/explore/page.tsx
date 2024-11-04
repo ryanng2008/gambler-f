@@ -9,7 +9,7 @@ export default async function Page() {
       <div className='HEAD'>
         <h1 className='text-5xl font-semibold'>Browse markets</h1>
       </div>
-      <div className='ACTIONBAR flex flex-row justify-between mx-6'>
+      {/* <div className='ACTIONBAR flex flex-row justify-between mx-6'>
         <div className='VIEW py-2 px-4 rounded-xl bg-graydark text-whitebkg flex flex-row items-center gap-4 drop-shadow-xl'>
           <p className='text-md '>View mode</p>
           <ChevronDownIcon height={16}/>
@@ -17,7 +17,7 @@ export default async function Page() {
         <div>
           <MagnifyingGlassIcon height={48} />
         </div>
-      </div>
+      </div> */}
       <MarketGallery />
     </div>
   )

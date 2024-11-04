@@ -8,15 +8,16 @@ export default function OptionsDashboard({ options, onRefresh }: { options: any[
     const { user } = useContext(AuthContext);
     console.log(options)
     const optionItems = options.map((option) => {
-        return <OptionItem 
+        return <div key={option.id}>
+            <OptionItem 
         onBetClose={handleCloseBet} 
-        key={option.id}
         id={option.id} 
         heading={option.heading} 
         subheading={option.subheading} 
         bettingline={option.bettingline}
         odds={option.odds}
         />
+        </div>
     })
     async function handleCloseBet(optionid: string, side: 'o' | 'u' | 'h' | 'm') {
         const closeBet = await handleResolveOption(user, optionid, side);

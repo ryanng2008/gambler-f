@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     try {
         const userBetsData = await fetchUserBets(username || '');
         if(userBetsData) {
-            const userOptionsData = await fetchUserBetsOptions(username || '');
+            const userOptionsData = await fetchUserBetsOptions(username || '');            
             return NextResponse.json({ 
                 bets: userBetsData,
                 options: userOptionsData

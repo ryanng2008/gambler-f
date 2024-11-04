@@ -1,5 +1,5 @@
 import { fetchMarketSubsections, fetchSubsectionsObjects, fetchUserBets } from "@/app/lib/data/getData";
-import { addBetToUser, addSubToMarket, postBet, postSubsection } from "@/app/lib/data/setData";
+import { addBetToUser, addSubToMarket, insertArray, postBet, postSubsection } from "@/app/lib/data/setData";
 import { unstable_noStore } from "next/cache";
 
 
@@ -36,7 +36,7 @@ import { unstable_noStore } from "next/cache";
 export async function GET() {
     unstable_noStore();
     try {
-        const result = await fetchUserBets('yannick123');
+        const result = await insertArray();
         return Response.json(result);
     } catch (error) {
         return Response.json(error)

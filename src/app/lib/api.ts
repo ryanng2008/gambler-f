@@ -1,6 +1,8 @@
 import { fetchUserBets, fetchUserBetsOptions } from "./data/getData";
 import { OptionFormData } from "./types";
 
+// Logic: From here, call API route, which runs a function using the modules in lib/data.
+
 export async function fetchUserBalance(userString: string) {
     try {
         const response = await fetch(`/api/user?username=${encodeURIComponent(userString)}`, {
@@ -182,7 +184,7 @@ export async function placeBet(bettorUser: string, optionId: string, betAmount: 
             body: JSON.stringify({ bettorUser, optionId, betAmount, payoutRate, side }),
         });
         if(response.status === 409) {
-            return { success: false, message: 'Database Conflict' };
+            return { success: false, message: 'No Money' };
         }
         if (!response.ok) {
             // If the response is not ok, throw an error with the status text

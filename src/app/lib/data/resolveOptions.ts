@@ -12,7 +12,8 @@ export async function resolveOptions(username: string, optionid: string, outcome
             WHERE id = ${optionid} AND creator = ${username}
         `
         if(optionData.rows.length < 1) {
-            throw new Error('This option does not exist, or the user does not have credentials to resolve it.')
+            return { success: false, message: 'Invalid credentials to resolve this option'}
+            // throw new Error('This option does not exist, or the user does not have credentials to resolve it.')
         }
         const betsData = await sql`
             SELECT * 
@@ -34,14 +35,9 @@ export async function resolveOptions(username: string, optionid: string, outcome
                     console.log(`made ${bet} transaction`)
                     const markAsResolved = await sql`
                         UPDATE bets 
-                        SET active = false
+                        SET active = false,
+                            result = 'w'
                         WHERE id = ${bet.id}
-                    `
-                    const manageEscrow = await sql`
-                        UPDATE users
-                        SET balance = balance + CASE WHEN escrow < 0 THEN escrow ELSE 0 END,
-                            escrow = CASE WHEN escrow < 0 THEN 0 ELSE escrow END
-                        WHERE username = ${bet.bettoruser}
                     `
                     // prolly dont need handling
                 } else {
@@ -56,7 +52,17 @@ export async function resolveOptions(username: string, optionid: string, outcome
                     SET escrow = escrow - ${bet.betamount}
                     WHERE username = ${bet.bettoruser}
                 `
-                if(!resolveDeduct) {
+                if(resolveDeduct) {
+                    console.log(`made ${bet} transaction`)
+                    const markAsResolved = await sql`
+                        UPDATE bets 
+                        SET active = false,
+                            result = 'l'
+                        WHERE id = ${bet.id}
+                    `
+                    // prolly dont need handling
+                } else {
+                    console.log(`failed to make ${bet} transaction`)
                     failedBets.push(bet)
                 }
                 // logic to remove money
@@ -65,7 +71,12 @@ export async function resolveOptions(username: string, optionid: string, outcome
             } else {
                 failedBets.push(bet);
             }
-            // Make some handling for creating a new row in resolvedBets
+            const manageEscrow = await sql`
+                        UPDATE users
+                        SET balance = balance + CASE WHEN escrow < 0 THEN escrow ELSE 0 END,
+                            escrow = CASE WHEN escrow < 0 THEN 0 ELSE escrow END
+                        WHERE username = ${bet.bettoruser}
+                    ` // this is to fix negative escrows
         })
         
         const markAsClosed = await sql`

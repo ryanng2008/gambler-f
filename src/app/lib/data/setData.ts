@@ -48,6 +48,13 @@ export async function postOption(heading: string, subheading: string, optiontype
 
 export async function postBet(bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',) {
     try {
+        const balance = await sql`
+            SELECT balance FROM users
+            WHERE username = ${bettorUser}
+        `
+        if(balance.rows[0].balance < betAmount) {
+            return 0
+        }
         const postedBet = await sql`
             INSERT INTO bets (bettoruser, optionid, betamount, payoutrate, side) VALUES
             (${bettorUser}, ${optionId}, ${betAmount}, ${payoutRate}, ${side})
@@ -57,7 +64,7 @@ export async function postBet(bettorUser: string, optionId: string, betAmount: n
         return postedBet.rows;
     } catch (error) {
         console.error('Database Error: ', error)
-        throw new Error(`Failed to add subsection to market.`)
+        throw new Error(`Failed to post bet.`)
     }
 }
 
@@ -78,6 +85,14 @@ export async function addBetToUser(username: string, betId: string, betAmount: n
     }
 }
 
+export async function insertArray() {
+    const arr = [[1, 2], [3, 4]]
+    sql.query(
+        `INSERT INTO test (id, matrix)
+         VALUES (3, $1)`,
+        [JSON.stringify(arr)]
+      );
+}
 
 // SAMPLE FOR text?
 // --------------------------------------------------------------------------------

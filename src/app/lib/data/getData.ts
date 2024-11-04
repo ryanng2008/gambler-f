@@ -12,7 +12,7 @@ export async function fetchOptions() {
 }
 
 
-// THIS DOESNT WORK
+// THIS DOESNT WORK EFFICIENTLY - use internal variable method like before!
 export async function fetchSpecOptions(optionIds: string[]) { // fetch all options from these optionIds
     try {
         const data = await Promise.all(
@@ -42,6 +42,26 @@ export async function fetchSpecOptions(optionIds: string[]) { // fetch all optio
     //    console.error('Database error when fetching options from optionIds array', error);
     //    throw new Error('Failed to fetch specific options data.')
     //}
+}
+
+export async function fetchSubsectionOptions(subsectionCode: string) {
+    try {
+        const bulkData = await sql`
+            SELECT * from options
+            WHERE code = ANY (
+                SELECT unnest(options)
+                FROM subsections
+                WHERE code = ${subsectionCode}
+            )
+        `
+        console.log('Fetching subsections from codes completed.');
+        return bulkData.rows;
+    } catch (error) {
+        console.error('Database fetch subsections from marketCode error: ', error);
+        return [];
+        // throw new Error(`Failed to fetch subsections from ${marketCode}`); 
+        //return Response.json({ message: error })
+    }
 }
 
 export async function fetchOption(optionId: string) {
@@ -136,9 +156,10 @@ export async function fetchUserBets(username: string) {
             FROM users
             WHERE username = ${username}
             )
-        AND active = true
-        `
+        ORDER BY created_at DESC;
+        ` //AND active = true
         const verifiedBets = data.rows.filter((bet) => bet.bettoruser === username);
+        console.log(verifiedBets)
         return verifiedBets;
     } catch(error) {
         console.error('Database Error: ', error)
@@ -159,7 +180,6 @@ export async function fetchUserBetsOptions(username: string) {
                 FROM users
                 WHERE username = ${username}
             )
-            AND active = true
         )
         `
         return data.rows;
@@ -193,6 +213,7 @@ export async function fetchMarket(code: string) {
         return data.rows[0];
     } catch (error) {
         console.error('Database Market Fetch Error', error)
+        return {}
         throw new Error(`Failed to fetch specific Market data of code ${code}`)
     }
 }
@@ -211,6 +232,7 @@ export async function fetchSubsectionsObjects(marketCode: string) { // Currently
         return bulkData.rows;
     } catch (error) {
         console.error('Database fetch subsections from marketCode error: ', error);
+        return [];
         throw new Error(`Failed to fetch subsections from ${marketCode}`); 
         //return Response.json({ message: error })
     }

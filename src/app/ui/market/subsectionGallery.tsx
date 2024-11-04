@@ -1,7 +1,7 @@
 "use server";
 import Link from 'next/link'
 //import { markets, subsections } from '../../../../trash/mock-data/data'
-import { fetchMarket, fetchMarketSubsections, fetchSpecOptions, fetchSubsectionsObjects } from '@/app/lib/data/getData'
+import { fetchMarket, fetchSubsectionsObjects } from '@/app/lib/data/getData'
 import { unstable_noStore as noStore } from 'next/cache';
 
 
@@ -9,7 +9,7 @@ export default async function SubsectionGallery({ marketCode }: { marketCode: st
     noStore();
     const marketObject = await fetchMarket(marketCode);
     //const subsectionCodes = await fetchMarketSubsections(marketCode); // this is working
-    const subsectionObjects = await fetchSubsectionsObjects(marketCode); // this is ad hoc with multiple queries
+    const subsectionObjects = await fetchSubsectionsObjects(marketCode); 
     
     const subItems = subsectionObjects.map((subsectionObject) => { // maybe u can move the fetches into here.
         return (

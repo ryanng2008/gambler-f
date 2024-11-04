@@ -9,11 +9,11 @@ export default function OptionItem({ id, heading='No Heading', subheading='', be
     const [hidden, setHidden] = useState(false);
     const adjustedLength = (odds < 30) ? [30, 100-odds] : (odds > 70) ? [odds, 30] : [odds, 100-odds];
     const handleOptionCloseClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        setHidden(true);
-        setMessage('');
         if(selected == null) {
             return;
         }
+        setHidden(true);
+        setMessage('Closing... do not refeesh the page');
         try {
             const result = await onBetClose(id, selected);
             if(result.success) {
@@ -68,9 +68,9 @@ export default function OptionItem({ id, heading='No Heading', subheading='', be
                         <button className={`rounded-md ${selected === 'o' ? 'bg-gray-700 text-white' : ' text-gray-700 bg-white border'} border-gray-700 py-1 px-3`} onClick={() => setSelected((selected !== 'o') ? 'o' : null)}>Over</button>
                         <button className={`rounded-md ${selected === 'u' ? 'bg-gray-700 text-white' : ' text-gray-700 bg-white border'} border-gray-700 py-1 px-3`} onClick={() => setSelected((selected !== 'u') ? 'u' : null )}>Under</button>
                     </div>
-                    <button className={`bg-gray-700 text-white px-6 py-1 rounded-md ${hidden}`} onClick={handleOptionCloseClick}>
+                    {!message && <button className={`bg-gray-700 text-white px-6 py-1 rounded-md ${hidden}`} onClick={handleOptionCloseClick}>
                         Close bet
-                    </button>
+                    </button>}
                     </div>
                     <div className="text-end">
                     {message && message}
