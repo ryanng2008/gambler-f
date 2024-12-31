@@ -21,7 +21,9 @@ export default function BetsDashboard({ loggedIn, bets, options }: { loggedIn: b
             ...bet,
             bettingline: matchingOption.bettingline || 0,
             heading: matchingOption.heading || 'Error',
-            subheading: matchingOption.subheading || 'Error'
+            subheading: matchingOption.subheading || 'Error',
+            optiontype: matchingOption.optiontype || 'hm',
+            choices: matchingOption.choices
         }
     })
     const [tab, setTab] = useState<'active' | 'resolved'>('active');
@@ -38,29 +40,8 @@ export default function BetsDashboard({ loggedIn, bets, options }: { loggedIn: b
         }
     })
 
-    const activeBetItems = activeBets.map((bet: any) => 
-    <ActiveBetItem 
-        key={bet.id}
-        side={bet.side}  
-        bettingline={bet.bettingline}
-        wager={bet.betamount}
-        heading={bet.heading}
-        subheading={bet.subheading}
-        payoutrate={bet.payoutrate}      
-    />
-)
-    const resolvedBetItems = resolvedBets.map((bet: any) => 
-    <ResolvedBetItem 
-        key={bet.id}
-        side={bet.side}  
-        bettingline={bet.bettingline}
-        wager={bet.betamount}
-        heading={bet.heading}
-        subheading={bet.subheading}
-        payoutrate={bet.payoutrate}
-        result={bet.result} 
-    />
-    )
+    const activeBetItems = activeBets.map((bet: any) => <ActiveBetItem key={bet.id} bet={bet}/>)
+    const resolvedBetItems = resolvedBets.map((bet: any) => <ResolvedBetItem key={bet.id} bet={bet}/>)
     
 
     // TO DO: Add the final payout NUMBER to the bet row

@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import AuthContext from '@/app/context/authContext';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/app/context/authContext';
 import { handleLogin } from '@/app/lib/api';
 
 
 
 export default function Login({ switchPage }: { switchPage: (pageName: string) => void; }) {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, login } = useAuth();
     const [form, setForm] = useState({
         username: '',
         password: ''
@@ -14,11 +14,9 @@ export default function Login({ switchPage }: { switchPage: (pageName: string) =
     const [message, setMessage] = useState('');
     
     async function onLogin() {
-        const loginAccount = await handleLogin(form.username, form.password);
+        const loginAccount = await login(form.username, form.password);
         if(loginAccount.success) {
-            //setSuccess(true);
             setMessage('Successfully logged in!')
-            setUser(form.username);
         } else {
             setMessage(`${loginAccount.message}`)
         }

@@ -11,10 +11,10 @@ export default async function OptionsGalleryWrapper({ subsectionCode }: { subsec
     //const subsectionOptionIds = subsection?.options;
     //console.log(subsectionOptionIds)
     //console.log('SUBSECTION OPTION IDs')
-    //const optionsData: any = await fetchSpecOptions(subsectionOptionIds);
+    //const optionsData: any = await fetchSubsectionOptions(subsectionCode);
     const optionsData: QueryResultRow[] = await fetchOptions();
 
     return (
-        <OptionsGalleryClient optionsData={optionsData} />
+        <OptionsGalleryClient optionsData={(optionsData as OptionType[])} />
     )
 }

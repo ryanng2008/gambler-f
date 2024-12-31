@@ -1,11 +1,11 @@
 'use client'
-import AuthContext from "@/app/context/authContext";
+import { useAuth } from "@/app/context/authContext";
 import { fetchUserOptionsAPI } from "@/app/lib/api";
 import OptionsDashboard from "@/app/ui/me/optionsDashboard";
 import { useEffect, useContext, useState } from "react";
 
 export default function Page() {
-    const { user } = useContext(AuthContext)
+    const { user } = useAuth()
     const [optionObjects, setOptionObjects] = useState<any[]>([]);
     const [refresh, setRefresh] = useState(false);
     async function getUserOptions(username: string) {

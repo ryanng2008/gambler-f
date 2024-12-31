@@ -4,10 +4,12 @@ import {
     Slider as BaseSlider,
     SliderProps,
   } from '@mui/base/Slider';
-import AuthContext from '@/app/context/authContext';
+import { useAuth } from '@/app/context/authContext';
 import { OptionType } from '@/app/lib/types'
 import { reduceRatio } from '@/app/lib/utils'
-import { placeBet } from '@/app/lib/api';
+import { placeBet, placePTWBet } from '@/app/lib/api';
+import clsx from 'clsx';
+import { postPTWBet } from '@/app/lib/data/setData';
 
 const Slider = forwardRef(function Slider(
         props: SliderProps,
@@ -32,8 +34,8 @@ function BetSlider({ onChange, value, range, step }:
     return (
         <div className='space-y-1 py-3'>
             <Slider 
-                min={range[0] ? range[0] : 0}
-                max={range[1] ? range[1] : 100}
+                min={range[0]}
+                max={range[1]}
                 step={1}
                 getAriaValueText={(value) => value.toString()}
                 onChange={onChange}
@@ -44,15 +46,12 @@ function BetSlider({ onChange, value, range, step }:
                 slotProps={{
                     thumb: {
                       className:
-                        'ring-cyan-500 dark:ring-cyan-400 ring-2 w-4 h-4 -mt-1 -ml-2 flex items-center justify-center bg-white rounded-full shadow absolute',
+                        'bg-slate-100 dark:bg-slate-700 drop-shadow-md w-4 h-4 -mt-1 -ml-2 flex items-center justify-center bg-white rounded-full shadow absolute',
                     },
                     root: { className: 'w-full relative inline-block h-2 cursor-pointer' },
                     rail: {
                       className:
                         'bg-slate-100 dark:bg-slate-700 h-2 w-full rounded-full block absolute',
-                    },
-                    track: {
-                      className: 'bg-cyan-500 dark:bg-cyan-400 h-2 absolute rounded-full',
                     },
                   }}
                 />
@@ -64,14 +63,23 @@ function BetSlider({ onChange, value, range, step }:
     )
 }
 
+function Card({ title, bigContent }: {title: string, bigContent: string }) {
+    return (
+        <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
+            <h2 className='font-semibold text-sm'>{title}</h2>
+            <h1 className=' font-extralight text-4xl'>{bigContent}</h1>
+        </div>
+    )
+}
+
 export function RegularOption({ open, onOpen, optionItem, balance, type }: { open: boolean, onOpen: any, optionItem: OptionType, balance: number, type: 'ou' | 'hm' }) {
     // const [selected, setSelected] = useState(false); // pull this up to PAGE which will select selected component
-    const { user, setUser } = useContext(AuthContext);
+    const { user } = useAuth();
     const [selectedSide, setSelectedSide] = useState<'left' | 'right' | '0'>('0');
     const [betAmount, setBetAmount] = useState<number>(0);
     const overPayoutRate = (100/ optionItem.odds) - 1;
     const truePayoutRate = selectedSide === 'left' ? overPayoutRate : (selectedSide === 'right' ? 1/overPayoutRate : 0);
-    const payoutPercent = selectedSide === 'left' ? Math.round(overPayoutRate * 1000)/10 : Math.round(1/overPayoutRate * 1000)/10;
+    const payoutPercent =  Math.round(truePayoutRate * 1000)/10;
     const oddsRatio = (selectedSide === 'left') ? reduceRatio(optionItem.odds, 100 - optionItem.odds) : ((selectedSide === 'right') ? reduceRatio(100 - optionItem.odds, optionItem.odds) : '0:0');
     //const leftLength = optionItem.odds > 80 ? 80 : optionItem.odds;
     //const [success, setSuccess] = useState(false);
@@ -103,24 +111,11 @@ export function RegularOption({ open, onOpen, optionItem, balance, type }: { ope
             setMessage('Failed... is your balance too low?')
         }
     }
-    //if(!visible) {
-    //    return <div></div>
-    //}
 
-    // Possibly handle that in optionsGallery instead. 
-
-    const Card = ({ title, bigContent }: {title: string, bigContent: string }) => {
-        return (
-            <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
-                <h2 className='font-semibold text-sm'>{title}</h2>
-                <h1 className=' font-extralight text-4xl'>{bigContent}</h1>
-            </div>
-        )
-    }
     return (
         <div className='BIG PARENT flex flex-col gap-0 bg-gray-300 rounded-xl duration-300 ease-in'>
             <button 
-                className={`O/U H/M OPTION py-4 px-2 grid grid-cols-5 gap-2 drop-shadow-xl bg-gray-300 rounded-xl text-left`}
+                className={`O/U H/M OPTION py-4 px-2 grid grid-cols-5 gap-2 drop-shadow-xl bg-gray-300 rounded-xl text-left h-[112px]`}
                 onClick={() => onOpen(optionItem.id)}>
                 <div className='IMAGE col-span-1 mx-auto my-auto'>
                     <Image 
@@ -142,7 +137,7 @@ export function RegularOption({ open, onOpen, optionItem, balance, type }: { ope
                     </div>
                 </div>
             </button>
-            <div className={`overflow-hidden duration-1000 ease-in-out ${open ? 'max-h-[600px]' : 'max-h-0'}`}>
+            <div className={`overflow-hidden duration-1000 ease-in-out ${open ? 'max-h-[100vh]' : 'max-h-0'}`}>
                 {
                     message 
                     ?
@@ -153,19 +148,18 @@ export function RegularOption({ open, onOpen, optionItem, balance, type }: { ope
                         <h1 className='font-semibold text-lg'>Pick a side</h1>
                         <div className='BAR CONTAINER bg-blue-300 rounded-lg p-4 flex flex-row justify-between items-center gap-4'>
                             <h2>{(type === 'ou') ? 'Over' : 'Hit'}</h2>
-                            <div className='BAR min-h-[64px] bg-red-400 w-full rounded-lg flex flex-row'>
+                            <div className='BAR min-h-[64px] bg-red-400 w-full rounded-lg overflow-hidden flex flex-row'>
                                 <button 
                                 className={`LEFT SIDE bg-white w-[50%] items-center flex justify-end rounded-l-lg border-green-300 ${selectedSide === 'left' && 'border-[3px]'}`}
                                 onClick={() => handleSelectSide('left')}>
                                     <div className='flex flex-col mx-3 text-right'>
-                                        <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && optionItem.odds}%`}</p>
+                                        <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && Math.trunc(optionItem.odds)}%`}</p>
                                         {/* <p className='text-sm inline'>33</p> */}
                                     </div>
                                 </button>
                                 <button 
                                 className={`RIGHT SIDE bg-black text-white w-[50%] items-center flex justify-start border-green-300 rounded-r-lg ${selectedSide === 'right' && 'border-[3px]'}`}
-                                onClick={() => handleSelectSide('right')}
-                                >
+                                onClick={() => handleSelectSide('right')}>
                                     <div className='flex flex-col mx-3 text-left'>
                                         <p className='text-md inline font-semibold'>{`${optionItem.odds !== -1 && (100 - optionItem.odds)}%`}</p>
                                         {/* <p className='text-sm  inline'>45</p> */}
@@ -215,32 +209,32 @@ export function RegularOption({ open, onOpen, optionItem, balance, type }: { ope
     )
 }
 
+// UNCHANGED
 export function PickTheWinnerOption({ open, onOpen, optionItem, balance }: { open: boolean, onOpen: any, optionItem: OptionType, balance: number }) {
-    const { user, setUser } = useContext(AuthContext);
-    const [selectedSide, setSelectedSide] = useState<'left' | 'right' | '0'>('0');
-    const [betAmount, setBetAmount] = useState<number>(0);
-    const overPayoutRate = (100/ optionItem.odds) - 1;
-    const truePayoutRate = selectedSide === 'left' ? overPayoutRate : (selectedSide === 'right' ? 1/overPayoutRate : 0);
-    const payoutPercent = selectedSide === 'left' ? Math.round(overPayoutRate * 1000)/10 : Math.round(1/overPayoutRate * 1000)/10;
-    const oddsRatio = (selectedSide === 'left') ? reduceRatio(optionItem.odds, 100 - optionItem.odds) : ((selectedSide === 'right') ? reduceRatio(100 - optionItem.odds, optionItem.odds) : '0:0');
-    //const leftLength = optionItem.odds > 80 ? 80 : optionItem.odds;
-    //const [success, setSuccess] = useState(false);
+    const { user } = useAuth();
     const [message, setMessage] = useState('')
-    function handleSelectWinner(side: string) {
-        
+    
+    // DATA VALUES
+    const [betAmount, setBetAmount] = useState<number>(0);
+    const [choiceId, setChoiceId] = useState<number | -1>(-1);
+    const chosenOdds = optionItem.choices[choiceId]?.odds;
+    const payoutRate = (100 / chosenOdds - 1) || 0;
+    const payoutPercent = (Math.round(payoutRate * 1000)/10);
+    const oddsRatio = (chosenOdds) ? reduceRatio(chosenOdds, 100 - chosenOdds) : '0:0';
+
+    // State/handler functions
+    function handleSelectWinner(index: number) {
+        setChoiceId(index);
     }
     function handleChangeBet(e: any) {
         setBetAmount(e.target.value);
     }
     async function onSubmit() {
-        // TODO: CONVERT "over" into "o", etc
-        // bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',
-        const side = (selectedSide === 'right') ? 'u' : 'o';
         if(user == null) {
             setMessage('Please log in')
             return
         }
-        const betPlacement = await placeBet(user, optionItem.id, betAmount, truePayoutRate, side);
+        const betPlacement = await placePTWBet(user, optionItem.id, betAmount, payoutRate, choiceId);
         if(betPlacement.success) {
             console.log('Success!')
             setMessage('Success!');
@@ -249,20 +243,23 @@ export function PickTheWinnerOption({ open, onOpen, optionItem, balance }: { ope
             setMessage('Failed... is your balance too low?')
         }
     }
-    //if(!visible) {
-    //    return <div></div>
-    //}
 
-    // Possibly handle that in optionsGallery instead. 
-
-    const Card = ({ title, bigContent }: {title: string, bigContent: string }) => {
+    // Mapping JSX for the different sides
+    const sides = (optionItem.choices).map((choice, i) => { 
         return (
-            <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
-                <h2 className='font-semibold text-sm'>{title}</h2>
-                <h1 className=' font-extralight text-4xl'>{bigContent}</h1>
-            </div>
+            <button key={i} onClick={() => handleSelectWinner(i)} 
+                className={clsx(
+                    'flex justify-between px-6 items-center py-4 border-l-2 border-r-2 border-gray-700', 
+                    choiceId === i ? 'bg-gray-700 text-white' : 'bg-white text-gray-700 hover:bg-gray-200',
+                    i === 0 ? 'rounded-t-lg border-t-2': 'border-t-[1px]',
+                    i === optionItem.choices.length - 1 ? 'rounded-b-lg border-b-2' : 'border-b-[1px]'
+                    )}>
+                <h1 className='text-lg font-medium'>{choice.choice_name || ''}</h1>
+                <p>{Math.trunc(choice.odds || 0)}%</p>
+            </button>
         )
-    }
+    })
+    
     return (
         <div className='BIG PARENT flex flex-col gap-0 bg-gray-300 rounded-xl duration-300 ease-in'>
             <button 
@@ -281,14 +278,11 @@ export function PickTheWinnerOption({ open, onOpen, optionItem, balance }: { ope
                         <h1 className='text-3xl font-semibold'>{optionItem.heading}</h1>
                     </div>
                     <div className='flex flex-row flex-wrap gap-4 items-center'>
-                        <div className='NUMBER font-semibold text-white bg-gray-700 px-3 py-1 rounded-lg'>
-                            <h1>{optionItem.bettingline}</h1>
-                        </div>
                         <p className='text-md'>{optionItem.subheading}</p>
                     </div>
                 </div>
             </button>
-            <div className={`overflow-hidden duration-1000 ease-in-out ${open ? 'max-h-[600px]' : 'max-h-0'}`}>
+            <div className={`overflow-hidden duration-1000 ease-in-out ${open ? 'max-h-[100vh]' : 'max-h-0'}`}>
                 {
                     message 
                     ?
@@ -297,12 +291,16 @@ export function PickTheWinnerOption({ open, onOpen, optionItem, balance }: { ope
                     <div className='px-8 py-6 flex flex-col gap-4'>
                         <div className='space-y-4'>
                         <h1 className='font-semibold text-lg'>Pick a side</h1>
-                        
+                        {/* TODO: Pick A Side PTW interface */}
+                        <div className='BAR CONTAINER rounded-lg p-4 flex flex-row justify-between items-center gap-4'>
+                            <div className='rounded-lg overflow-hidden flex flex-col w-4/5 mx-auto'>
+                                {sides}
+                            </div>
+                        </div>
                         </div>
                         <div className='space-y-4 flex flex-col'>
                         <h1 className='font-semibold text-lg'>Stake</h1>
                         <div className='space-y-1'>
-                            
                             <BetSlider 
                             onChange={handleChangeBet}
                             value={Number(betAmount)}
@@ -312,13 +310,13 @@ export function PickTheWinnerOption({ open, onOpen, optionItem, balance }: { ope
                         </div>
                         <div className='flex justify-center gap-4 mx-4'>
                             <div className='sm:block hidden'><Card title='Odds' bigContent={oddsRatio}/></div>
-                            <Card title='Payout %' bigContent={(selectedSide === 'left' || selectedSide === 'right') ? `${payoutPercent}%` : 'N/A'}/>
+                            <Card title='Payout %' bigContent={`${payoutPercent}%`}/>
                             {/* <Card title='Win Profit' bigContent={`$${Math.round(betAmount * truePayoutRate * 100) / 100}`}/> */}
                             <div className='bg-gray-200 min-w-[110px] flex flex-col px-3 pt-3 pb-4 gap-1 justify-center text-center rounded-md'>
                                 <h2 className='font-semibold text-sm'>Win Profit</h2>
                                 <div className='flex gap-[2px] justify-center'>
                                     <h2 className='text-lg mb-1 self-end'>$</h2>
-                                    <h1 className=' font-extralight text-4xl'>{Math.round(betAmount * truePayoutRate * 100) / 100}</h1>
+                                    <h1 className=' font-extralight text-4xl'>{Math.round(betAmount * payoutRate * 100) / 100}</h1>
                                 </div>
                             </div>
                         </div>

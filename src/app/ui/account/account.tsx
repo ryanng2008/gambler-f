@@ -1,25 +1,25 @@
 // This component for account settings
 'use client';
-import { useContext, useEffect, useState } from 'react';
-import AuthContext from '@/app/context/authContext';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { fetchUserBalance } from '@/app/lib/api';
+import { useAuth } from '@/app/context/authContext';
 
 export default function Account() {
-    const { user, setUser } = useContext(AuthContext);
-    const [balance, setBalance] = useState<number | null>(null);
-    async function fetchBalance(userString: string) {
-        try {
-            const balanceData = await fetchUserBalance(userString);
-            setBalance(balanceData);
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    const { user, setUser, userProperties, loadUser } = useAuth();
+    // const [balance, setBalance] = useState<number | null>(null);
+    // async function fetchBalance(userString: string) {
+    //     try {
+    //         const balanceData = await fetchUserBalance(userString);
+    //         setBalance(balanceData);
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
     useEffect(() => {
         //console.log('RERUN FETCH BALANCE')
-        fetchBalance(user);
-    })
+        loadUser()
+    }, [])
     const router = useRouter();
     return (
         <div className='space-y-4 '>
@@ -28,7 +28,7 @@ export default function Account() {
             </div>
             <div className='flex gap-2'>
                 <p>Balance: </p>
-                <p>${balance}</p>
+                <p>${userProperties.balance}</p>
             </div>
             <button onClick={() => {
                 setUser(null)

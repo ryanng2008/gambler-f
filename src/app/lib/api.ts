@@ -1,4 +1,4 @@
-import { fetchUserBets, fetchUserBetsOptions } from "./data/getData";
+// import { fetchUserBets, fetchUserBetsOptions } from "./data/getData";
 import { OptionFormData } from "./types";
 
 // Logic: From here, call API route, which runs a function using the modules in lib/data.
@@ -20,7 +20,7 @@ export async function fetchUserBalance(userString: string) {
         }
         
     } catch (error) {
-        console.error('Error fetching balance in Navbar component:', error);
+        console.error('Error fetching balance', error);
     }
 }
 
@@ -81,6 +81,27 @@ export async function handleResolveOption(username: string, optionid: string, ou
         return { success: true, message: 'Resolution successful' }
     } catch (error) {
         console.error('Error in resolve option handler: ', error)
+        return { success: false, message: error }
+    }
+}
+
+export async function handleResolvePTWOption(username: string, optionid: string, outcome: number) {
+    const secretkey = 'nigga'
+    try {
+        const response = await fetch(`/api/resolve-ptw-bet`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username, optionid, outcome, secretkey})
+        })
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`Resolution failed: ${data}`);
+        }
+        return { success: true, message: 'Resolution successful' }
+    } catch (error) {
+        console.error('Error in resolve PTW option handler: ', error)
         return { success: false, message: error }
     }
 }
@@ -158,14 +179,14 @@ export async function handleRegister(username: string, password: string) {
 
 
 // DO ERROR HANDLING FOR THIS
-export async function handleSubmitOption(form: OptionFormData, username: string) {
+export async function handleSubmitOption(form: OptionFormData, choices: {choice: string, odds: number}[], username: string) {
     const fixedForm = (Number(form.minbet) > Number(form.maxbet)) ? {...form, minbet: form.maxbet, maxbet: form.minbet} : form;
     await fetch('/api/submit-option', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({...fixedForm, user: username})
+        body: JSON.stringify({...fixedForm, ptwchoices: choices, user: username})
     })
     .then(response => response.json())
     .then(data => console.log(data))
@@ -182,6 +203,35 @@ export async function placeBet(bettorUser: string, optionId: string, betAmount: 
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ bettorUser, optionId, betAmount, payoutRate, side }),
+        });
+        if(response.status === 409) {
+            return { success: false, message: 'No Money' };
+        }
+        if (!response.ok) {
+            // If the response is not ok, throw an error with the status text
+            const errorText = await response.text();
+            throw new Error(`Post bet failed failed: ${errorText}`);
+        }
+        const data = await response.json();
+        return { success: true, data, message: 'Success!' };
+    } catch (error) {
+        console.error('Error in placing bet:', error);
+        return { success: false, message: error};
+    }
+    // Run the postBet - check for successful response
+    //
+}
+
+export async function placePTWBet(bettorUser: string, optionId: string, betAmount: number, payoutRate: number, winner: number) { // ADD THE CONTENT
+    // bettorUser: string, optionId: string, betAmount: number, payoutRate: number, side: 'o' | 'u' | 'h' | 'm',
+    // Synchronise with API route
+    try {
+        const response = await fetch(`/api/place-ptw-bet`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ bettorUser, optionId, betAmount, payoutRate, winner }),
         });
         if(response.status === 409) {
             return { success: false, message: 'No Money' };

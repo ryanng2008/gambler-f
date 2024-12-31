@@ -2,7 +2,10 @@ import { sql } from '@vercel/postgres';
 
 export async function fetchOptions() {
     try {
-        const data = await sql`SELECT * FROM options WHERE closed = false`;
+        const data = await sql`
+        SELECT *, array_to_json(ptwchoices) AS choices
+        FROM options 
+        WHERE closed = false`;
         console.log('fetch all options completed')
         return data.rows;
     } catch (error) {
@@ -12,18 +15,20 @@ export async function fetchOptions() {
 }
 
 
+
+
 // THIS DOESNT WORK EFFICIENTLY - use internal variable method like before!
 export async function fetchSpecOptions(optionIds: string[]) { // fetch all options from these optionIds
     try {
         const data = await Promise.all(
-            optionIds.map(async (optionId) => {
-                const optionObject = await sql`
+            optionIds.map((optionId) => {
+                const optionObject = sql`
                     SELECT * from options
                     WHERE id = ${optionId};
-                    `
-                console.log(`Finished fetching option ${optionId}`)
-                //console.log(optionObject.rows)
-                return optionObject.rows[0];
+                    `.then(optionObject => {
+                        console.log(`Finished fetching option ${optionId}`);
+                        return optionObject.rows[0];
+                    })
             })
         )
         return data;
@@ -170,7 +175,7 @@ export async function fetchUserBets(username: string) {
 export async function fetchUserBetsOptions(username: string) {
     try {
         const data = await sql`
-        SELECT *
+        SELECT *, array_to_json(ptwchoices) AS choices
         from options
         WHERE id::text = ANY (
             SELECT optionid 
@@ -192,7 +197,8 @@ export async function fetchUserBetsOptions(username: string) {
 export async function fetchUserOptions(username: string) {
     try {
         const data = await sql`
-        SELECT * FROM options
+        SELECT *, array_to_json(ptwchoices) AS choices
+        FROM options
         WHERE creator = ${username}
         AND closed = false;
         `

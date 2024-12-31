@@ -1,9 +1,9 @@
-import AuthContext from "@/app/context/authContext";
+import { useAuth } from "@/app/context/authContext";
 import { handleRegister } from "@/app/lib/api";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 export default function Register({ switchPage }: { switchPage: (pageName: string) => void}) {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, register } = useAuth();
     const [form, setForm] = useState({
         username: '',
         password: ''
@@ -13,10 +13,9 @@ export default function Register({ switchPage }: { switchPage: (pageName: string
     async function onRegister() {
         //console.log('PASSWORD')
         //console.log(form.password)
-        const registerAccount = await handleRegister(form.username.trim(), form.password.trim());
+        const registerAccount = await register(form.username.trim(), form.password.trim());
         if(registerAccount.success) {
             setSuccess(true);
-            setUser(form.username)
             setMessage('Success!')
         } else {
             setMessage(`${registerAccount.message}`)
@@ -24,18 +23,25 @@ export default function Register({ switchPage }: { switchPage: (pageName: string
     }
 
     return (
+        <>
+        {
+        (user != null) ?
+        (<div>
+            <p>{message ? message : 'Nothing to see here (try refreshing?)'}</p>
+        </div>)
+        :
         <div className="CONTAINER flex flex-col gap-6">
             <div className="HEAD">
                 <h1 className="text-4xl font-semibold">Register</h1>
             </div>
             {
-                (success)
-                ? 
-                <div className="flex flex-col gap-2">
-                    <p>{message}</p>
-                    <button className='py-1 hover:underline hover:text-gray-500 rounded-lg' onClick={() => switchPage('login')}>Login</button>
-                </div> 
-                : 
+                // (success)
+                // ? 
+                // <div className="flex flex-col gap-2">
+                //     <p>{message}</p>
+                //     <button className='py-1 hover:underline hover:text-gray-500 rounded-lg' onClick={() => switchPage('login')}>Login</button>
+                // </div> 
+                // : 
                 <div className="BODY gap-4 justify-start">
                     <div className='flex flex-col gap-2'>
                         <input 
@@ -77,5 +83,7 @@ export default function Register({ switchPage }: { switchPage: (pageName: string
             }
             
         </div>
+        }
+        </>
     )
 }

@@ -1,20 +1,17 @@
 'use client';
 import { RegularOption, PickTheWinnerOption } from '@/app/ui/subsection/option'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 //import { options, subsections } from '../../../../trash/mock-data/data'
 import { OptionType } from '@/app/lib/types'
-import AuthContext from '@/app/context/authContext';
-import Image from 'next/image';
 import { fetchUserBalance } from '@/app/lib/api';
-import { unstable_noStore } from 'next/cache';
+import { useAuth } from '@/app/context/authContext';
 
 
-export default function OptionsGalleryClient({ optionsData } : { optionsData: any /*Should be OptionsType[] when fixed*/}) { {
-    unstable_noStore();
-    /* { subsectionCode="none",  }: {subsectionCode: string } */}
+export default function OptionsGalleryClient({ optionsData } : { optionsData: OptionType[] /*Should be OptionsType[] when fixed*/}) { 
+    /* { subsectionCode="none",  }: {subsectionCode: string } */
     //const subsection = await fetchSubsection(subsectionCode); //subsections.find(s => s.code === subsectionCode);
     //const subsectionOptionsIds = subsection?.options;
-    const { user, setUser } = useContext(AuthContext);
+    const { user } = useAuth();
     const [balance, setBalance] = useState<number | null>(null); // maybe merge this in the future, into another context variable
     const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
     const noneSelected = (selectedOptionId === null);
@@ -65,7 +62,22 @@ export default function OptionsGalleryClient({ optionsData } : { optionsData: an
             rightOptionsItems.push(optionItem)
         }
     })
-    // const optionsItems = optionsData.map((option: OptionType) => {
+    return (
+        <div className='OPTIONS GALLERY lg:grid grid-cols-2 flex flex-col gap-6 mx-6'>
+            {/* {optionsItems} */}
+            <div className='LEFT flex flex-col gap-6'>
+                {leftOptionsItems}
+            </div>
+            <div className='RIGHT flex flex-col gap-6'>
+                {rightOptionsItems}
+            </div>
+        </div>
+
+
+    )
+}
+
+ // const optionsItems = optionsData.map((option: OptionType) => {
     //     return (
     //         (noneSelected || selectedOptionId == option.id) 
     //             ? <Option 
@@ -90,17 +102,3 @@ export default function OptionsGalleryClient({ optionsData } : { optionsData: an
         
     // })
     // u might have to pass to Option using context!
-    return (
-        <div className='OPTIONS GALLERY lg:grid grid-cols-2 flex flex-col gap-6 mx-6'>
-            {/* {optionsItems} */}
-            <div className='LEFT flex flex-col gap-6'>
-                {leftOptionsItems}
-            </div>
-            <div className='RIGHT flex flex-col gap-6'>
-                {rightOptionsItems}
-            </div>
-        </div>
-
-
-    )
-}

@@ -1,15 +1,15 @@
 'use client' 
 import Image from 'next/image'
 import Link from 'next/link';
-import AuthContext from '@/app/context/authContext';
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 //import { UserCircleIcon as OutlineUser } from '@heroicons/react/24/outline';
 import { fetchUserBalance } from '@/app/lib/api';
+import { useAuth } from '@/app/context/authContext';
 
 export default function Navbar() {
-    const { user, setUser } = useContext(AuthContext);
-    const [balance, setBalance] = useState<number>(0);
+    const { user, userProperties } = useAuth();
+    // const [balance, setBalance] = useState<number>(0);
     const [open, setOpen] = useState(false);
     //console.log('user:')
     //console.log(user);
@@ -17,18 +17,18 @@ export default function Navbar() {
         {name: 'Browse', href: '/home/explore'},
         {name: 'Create', href: '/home/create'}
     ]
-    async function fetchBalance(userString: string) {
-        try {
-            const balanceData = await fetchUserBalance(userString);
-            setBalance(balanceData || null);
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    useEffect(() => {
-        console.log('RERUN FETCH BALANCE')
-        fetchBalance(user);
-    })
+    // async function fetchBalance(userString: string) {
+    //     try {
+    //         const balanceData = await fetchUserBalance(userString);
+    //         setBalance(balanceData || null);
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
+    // useEffect(() => {
+    //     console.log('RERUN FETCH BALANCE')
+    //     fetchBalance(user);
+    // }, [user])
 
 
     return (
@@ -63,7 +63,7 @@ export default function Navbar() {
                 </div>
                 <div className='OTHER ITEMS flex flex-row gap-12 justify-end'>
                     {user != null && <div className='MONEY py-2 my-auto tracking-wide px-6 font-bold bg-greendark text-greenfaded drop-shadow-lg rounded-xl hidden lg:block'>
-                        <p>{`$${(balance || 0).toLocaleString()}`}</p>
+                        <p>{`$${(userProperties.balance || 0).toLocaleString()}`}</p>
                     </div>}
                     {/* <Link href='/home/account/'>
                     {

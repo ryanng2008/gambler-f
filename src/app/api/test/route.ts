@@ -1,6 +1,8 @@
 import { fetchMarketSubsections, fetchSubsectionsObjects, fetchUserBets } from "@/app/lib/data/getData";
 import { addBetToUser, addSubToMarket, insertArray, postBet, postSubsection } from "@/app/lib/data/setData";
+import { sql } from "@vercel/postgres";
 import { unstable_noStore } from "next/cache";
+import { NextResponse } from "next/server";
 
 
 // export async function POST(request: any) {
@@ -33,12 +35,20 @@ import { unstable_noStore } from "next/cache";
 //     //return Response.json(data);
 // }
 
+// export async function GET() {
+//     unstable_noStore();
+//     try {
+//         const result = await insertArray();
+//         return Response.json(result);
+//     } catch (error) {
+//         return Response.json(error)
+//     }
+// }
+
 export async function GET() {
-    unstable_noStore();
-    try {
-        const result = await insertArray();
-        return Response.json(result);
-    } catch (error) {
-        return Response.json(error)
-    }
+    const insertedOption = await sql`
+        SELECT array_to_json(ptwchoices) as choices
+        FROM options
+        `
+    return new NextResponse(JSON.stringify(insertedOption.rows));
 }

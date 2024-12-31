@@ -1,8 +1,8 @@
-'use server';
-import AuthContext from "@/app/context/authContext";
-import { fetchUser } from "@/app/lib/data/getData";
-import { useContext } from "react";
-import Navbar from '../src/app/ui/home/navbar'
+// 'use server';
+// import AuthContext from "@/app/context/authContext";
+// import { fetchUser } from "@/app/lib/data/getData";
+// import { useContext } from "react";
+// import Navbar from '../src/app/ui/home/navbar'
 
 //interface User {
 //    id: string,

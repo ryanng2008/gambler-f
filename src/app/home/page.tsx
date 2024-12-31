@@ -1,10 +1,9 @@
 'use client'
-import { useContext } from "react"
-import AuthContext from "../context/authContext"
 import Link from "next/link"
+import { useAuth } from "../context/authContext"
 
 function Page() {
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
   return (
     <div className="h-[75vh]">
         <div className="h-full my-auto flex flex-col gap-2 justify-center">

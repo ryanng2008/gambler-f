@@ -1,6 +1,6 @@
 'use client';
 import BetsDashboard from "@/app/ui/me/betsDashboard";
-import AuthContext from "@/app/context/authContext";
+import { useAuth } from "@/app/context/authContext";
 import { useContext, useEffect, useState } from "react";
 //import { fetchUserBets, fetchUserBetsOptions } from "@/app/lib/data/getData";
 import { fetchUserBetsAPI } from "@/app/lib/api";
@@ -8,7 +8,7 @@ import { unstable_noStore } from "next/cache";
 
 export default function Page() {
     unstable_noStore();
-    const { user, setUser } = useContext(AuthContext);
+    const { user } = useAuth();
     const [betObjects, setBetObjects] = useState<any[]>([]);
     // console.log('bets')
     // console.log(betObjects)

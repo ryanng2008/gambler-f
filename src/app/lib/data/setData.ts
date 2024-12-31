@@ -32,6 +32,7 @@ export async function addSubToMarket(marketCode: string, subsectionCode: string)
     }
 }
 
+// UNUSED?
 export async function postOption(heading: string, subheading: string, optiontype: string, bettingline: number, imagelink: string, odds=50, minbet=0, maxbet=0) {
     try {
         const insertedOption = await sql`
@@ -61,10 +62,30 @@ export async function postBet(bettorUser: string, optionId: string, betAmount: n
             RETURNING *;
         `
         console.log(`Posted bet from ${optionId} by ${bettorUser}`)
+        return postedBet.rows[0];
+    } catch (error) {
+        console.error('Database Error: ', error)
+    }
+}
+
+export async function postPTWBet(bettorUser: string, optionId: string, betAmount: number, payoutRate: number, winnerid: number) {
+    try {
+        const balance = await sql`
+            SELECT balance FROM users
+            WHERE username = ${bettorUser}
+        `
+        if(balance.rows[0].balance < betAmount) {
+            return 0
+        }
+        const postedBet = await sql`
+            INSERT INTO bets (bettoruser, optionid, betamount, payoutrate, winner) VALUES
+            (${bettorUser}, ${optionId}, ${betAmount}, ${payoutRate}, ${winnerid})
+            RETURNING *;
+        `
+        console.log(`Posted bet from ${optionId} by ${bettorUser}`)
         return postedBet.rows;
     } catch (error) {
         console.error('Database Error: ', error)
-        throw new Error(`Failed to post bet.`)
     }
 }
 
