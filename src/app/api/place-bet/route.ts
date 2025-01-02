@@ -9,8 +9,8 @@ export async function POST(request: any) {
         if(data === 0) {
             return new Response('No Money', { status: 409 })
         }
-        if(data && data.length > 0) {
-            const betId = data[0].id;
+        if(data) {
+            const betId = data.id;
             try {
                 const appendToUser = await addBetToUser(bettorUser, betId, betAmount);
                 return new Response(JSON.stringify(appendToUser), { status: 201 });

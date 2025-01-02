@@ -61,7 +61,8 @@ export async function postBet(bettorUser: string, optionId: string, betAmount: n
             (${bettorUser}, ${optionId}, ${betAmount}, ${payoutRate}, ${side})
             RETURNING *;
         `
-        console.log(`Posted bet from ${optionId} by ${bettorUser}`)
+        // console.log(postedBet.rows[0])
+        // console.log(`Posted bet from ${optionId} by ${bettorUser}`)
         return postedBet.rows[0];
     } catch (error) {
         console.error('Database Error: ', error)
